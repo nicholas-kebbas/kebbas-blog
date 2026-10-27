@@ -163,14 +163,6 @@ main:focus {
   letter-spacing: -0.13em;
   line-height: 1;
 }
-.monogram i {
-  font-family: serif;
-  font-style: normal;
-  font-size: 24px;
-  letter-spacing: 0;
-  margin-left: 12px;
-  color: var(--lime);
-}
 .site-header nav {
   display: flex;
   gap: 28px;
@@ -214,23 +206,6 @@ main:focus {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 3px 28px #ff46951a);
-}
-.hero h1 i {
-  font-style: normal;
-  font-family: Georgia, serif;
-  position: absolute;
-  top: -14%;
-  left: 62%;
-  font-size: 0.33em;
-  font-weight: 400;
-  color: var(--lime);
-  animation: slowspin 40s linear 1;
-  animation-play-state: paused;
-}
-@keyframes slowspin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 .hero-cta {
   display: inline-flex;
@@ -286,9 +261,6 @@ main:focus {
   margin-top: -36px;
   border-color: var(--lime);
 }
-html[data-motion="full"] .hero h1 i {
-  animation-play-state: running;
-}
 html[data-motion="still"] *,
 html[data-motion="still"] *::before,
 html[data-motion="still"] *::after {
@@ -323,10 +295,6 @@ html[data-motion="still"] .cursor-orbit {
   .monogram {
     font-size: 31px;
   }
-  .monogram i {
-    font-size: 20px;
-    margin-left: 9px;
-  }
   .site-header nav {
     order: 3;
     flex-basis: 100%;
@@ -358,12 +326,6 @@ html[data-motion="still"] .cursor-orbit {
     font-size: 20.5vw;
     line-height: 0.85;
     letter-spacing: -0.08em;
-  }
-  .hero h1 i {
-    left: auto;
-    right: 12%;
-    top: -25%;
-    font-size: 0.32em;
   }
   .hero-cta {
     font-size: 18px;
