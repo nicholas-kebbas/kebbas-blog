@@ -1,6 +1,5 @@
 ---
-// An original procedural sculpture. The SVG remains available without WebGL.
-const arcs = Array.from({ length: 13 }, (_, index) => index);
+// Original procedural glass-metal sculpture, with a matching no-WebGL fallback.
 ---
 
 <div class="observatory" data-observatory data-suspended="true">
@@ -13,23 +12,24 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
     <defs>
       <linearGradient
         id="observatory-metal"
-        x1="690"
-        y1="170"
-        x2="1290"
+        x1="760"
+        y1="180"
+        x2="1310"
         y2="690"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#f5f2e9" />
-        <stop offset=".12" stop-color="#8d9aac" />
-        <stop offset=".22" stop-color="#f7faff" />
-        <stop offset=".29" stop-color="#313846" />
-        <stop offset=".43" stop-color="#a7b0cf" />
-        <stop offset=".49" stop-color="#f0f5c2" />
-        <stop offset=".57" stop-color="#2c3242" />
-        <stop offset=".71" stop-color="#e8e9f4" />
-        <stop offset=".82" stop-color="#8e8eac" />
-        <stop offset=".94" stop-color="#d8f556" />
-        <stop offset="1" stop-color="#f7f9e5" />
+        <stop stop-color="#fff7ca" />
+        <stop offset=".09" stop-color="#ffae31" />
+        <stop offset=".2" stop-color="#ff395f" />
+        <stop offset=".32" stop-color="#d227ff" />
+        <stop offset=".43" stop-color="#3317ac" />
+        <stop offset=".49" stop-color="#cfb4ff" />
+        <stop offset=".55" stop-color="#4bdcff" />
+        <stop offset=".65" stop-color="#155bff" />
+        <stop offset=".77" stop-color="#29158b" />
+        <stop offset=".85" stop-color="#ff43d5" />
+        <stop offset=".94" stop-color="#ff793d" />
+        <stop offset="1" stop-color="#fff0b5" />
       </linearGradient>
       <linearGradient
         id="observatory-edge"
@@ -39,95 +39,47 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
         y2="220"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#c2d8ff" />
-        <stop offset=".5" stop-color="#252a32" />
-        <stop offset="1" stop-color="#d5f56e" />
+        <stop stop-color="#36e5ff" />
+        <stop offset=".35" stop-color="#3f5eff" />
+        <stop offset=".65" stop-color="#fa5aff" />
+        <stop offset="1" stop-color="#fff2c4" />
       </linearGradient>
       <radialGradient id="observatory-halo">
-        <stop stop-color="#c5d6ff" stop-opacity=".08" />
-        <stop offset="1" stop-color="#c5d6ff" stop-opacity="0" />
+        <stop stop-color="#b129ff" stop-opacity=".35" />
+        <stop offset=".42" stop-color="#4932ef" stop-opacity=".19" />
+        <stop offset="1" stop-color="#2918be" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="observatory-flare">
+        <stop stop-color="#ff5678" stop-opacity=".25" />
+        <stop offset="1" stop-color="#ff5678" stop-opacity="0" />
       </radialGradient>
     </defs>
-    <ellipse
-      cx="1030"
-      cy="450"
-      rx="470"
-      ry="400"
-      fill="url(#observatory-halo)"
-    />
+    <ellipse cx="1050" cy="460" rx="560" ry="430" fill="url(#observatory-halo)" />
+    <ellipse cx="1120" cy="230" rx="330" ry="290" fill="url(#observatory-flare)" />
     <g transform="rotate(-24 1030 450)">
-      <ellipse
-        cx="1030"
-        cy="450"
-        rx="382"
-        ry="172"
-        stroke="#c8d3e1"
-        stroke-opacity=".16"
-      />
       <ellipse
         cx="1030"
         cy="450"
         rx="405"
         ry="185"
-        stroke="#c8d3e1"
-        stroke-opacity=".07"
+        stroke="url(#observatory-edge)"
+        stroke-opacity=".24"
       />
       <path
         d="M 935,225 C 1160,135 1374,402 1190,530 C 1035,644 769,625 803,436 C 827,276 1079,273 1121,474 C 1160,661 976,752 897,604 C 811,441 817,265 935,225 Z"
         stroke="url(#observatory-metal)"
-        stroke-width="94"
+        stroke-width="108"
       />
       <path
         d="M 935,225 C 1160,135 1374,402 1190,530 C 1035,644 769,625 803,436 C 827,276 1079,273 1121,474 C 1160,661 976,752 897,604 C 811,441 817,265 935,225 Z"
         stroke="url(#observatory-edge)"
         stroke-width="2"
       />
-      {arcs.map((i) => (
-        <ellipse
-          cx="1030"
-          cy="450"
-          rx={210 + i * 5}
-          ry={72 + i * 4}
-          transform={`rotate(${55 + i * 2} 1030 450)`}
-          stroke="#e6edff"
-          stroke-opacity={0.035 + i * 0.004}
-        />
-      ))}
-      <circle cx="1380" cy="430" r="17" fill="url(#observatory-metal)" />
+      <circle cx="1380" cy="430" r="19" fill="url(#observatory-metal)" />
       <circle cx="775" cy="650" r="10" fill="url(#observatory-edge)" />
     </g>
   </svg>
   <canvas class="observatory-canvas" aria-hidden="true"></canvas>
-  <div class="observatory-controls" hidden>
-    <div class="observatory-control-top">
-      <span class="observatory-control-label">Shape</span>
-      <span class="observatory-coordinate" aria-hidden="true">
-        001
-      </span>
-    </div>
-    <div class="observatory-modes" role="group" aria-label="Sculpture form">
-      <button type="button" data-observatory-mode="0" aria-pressed="true">
-        Matter
-      </button>
-      <button type="button" data-observatory-mode="1" aria-pressed="false">
-        Signal
-      </button>
-      <button type="button" data-observatory-mode="2" aria-pressed="false">
-        Orbit
-      </button>
-    </div>
-    <label class="observatory-entropy">
-      <span>Entropy</span>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value="38"
-        aria-label="Sculpture entropy"
-      />
-      <output>38</output>
-    </label>
-  </div>
 </div>
 
 <style>
@@ -135,7 +87,7 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
     position: absolute;
     inset: 0;
     overflow: hidden;
-    background: #0a0b0d;
+    background: #07051a;
   }
   .observatory-canvas,
   .observatory-fallback {
@@ -157,106 +109,12 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
   .observatory[data-ready] .observatory-fallback {
     visibility: hidden;
   }
-  .observatory-controls {
-    position: absolute;
-    z-index: 8;
-    right: clamp(24px, 4vw, 72px);
-    bottom: 28px;
-    width: 258px;
-    color: #b2b6c2;
-    font-family: "Courier New", monospace;
-    font-size: 10px;
-    line-height: 1.3;
-    letter-spacing: 0.05em;
-  }
-  .observatory-controls[hidden] {
-    display: none;
-  }
-  .observatory-control-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    gap: 12px;
-  }
-  .observatory-control-label {
-    text-transform: uppercase;
-  }
-  .observatory-coordinate {
-    color: #626973;
-    font-size: 9px;
-  }
-  .observatory-modes {
-    display: flex;
-    gap: 3px;
-    padding: 3px;
-    border: 1px solid #edf0f51f;
-    background: #101319d9;
-    backdrop-filter: blur(8px);
-  }
-  .observatory-modes button {
-    flex: 1;
-    min-height: 39px;
-    padding: 8px 10px;
-    background: transparent;
-    border: 0;
-    font: inherit;
-    color: #c0c4ce;
-    cursor: pointer;
-    transition:
-      color 0.15s,
-      background 0.15s;
-  }
-  .observatory-modes button[aria-pressed="true"] {
-    color: #11150c;
-    background: #d5f56e;
-  }
-  .observatory-modes button:hover:not([aria-pressed="true"]) {
-    color: white;
-    background: #ffffff0b;
-  }
-  .observatory-modes button:focus-visible,
-  .observatory-entropy input:focus-visible {
-    outline: 2px solid #d5f56e;
-    outline-offset: 4px;
-  }
-  .observatory-entropy {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-top: 12px;
-  }
-  .observatory-entropy input {
-    width: 100%;
-    min-width: 0;
-    height: 28px;
-    accent-color: #d5f56e;
-    cursor: ew-resize;
-    margin: 0;
-  }
-  .observatory-entropy output {
-    width: 3ch;
-    text-align: right;
-    color: #d5f56e;
-  }
   @media (max-width: 650px) {
-    .observatory-controls {
-      right: 20px;
-      bottom: 25px;
-      width: min(258px, calc(100% - 40px));
-    }
     .observatory-fallback {
       width: 165%;
       left: -55%;
       transform: translateY(12%) scale(0.82);
       transform-origin: center;
-    }
-    .observatory-modes button {
-      min-height: 44px;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .observatory-modes button {
-      transition: none;
     }
   }
 </style>
@@ -271,415 +129,336 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
     uniform vec2 resolution;
     uniform vec2 pointer;
     uniform float time;
-    uniform float entropy;
-    uniform float mode;
     const float PI = 3.14159265359;
     mat2 rot(float a) { float s = sin(a), c = cos(a); return mat2(c, -s, s, c); }
-    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
     float smin(float a, float b, float k) {
       float h = clamp(.5 + .5 * (b - a) / k, 0.0, 1.0);
       return mix(b, a, h) - k * h * (1.0 - h);
     }
     vec3 turn(vec3 p) {
-      p.xz = rot(.22 + time * .055 + pointer.x * .16) * p.xz;
-      p.yz = rot(.51 + .13 * sin(time * .13) + pointer.y * .12) * p.yz;
+      p.xz = rot(.22 + time * .055 + pointer.x * .12) * p.xz;
+      p.yz = rot(.51 + .13 * sin(time * .13) + pointer.y * .09) * p.yz;
       p.xy = rot(-.44) * p.xy;
       return p;
     }
     float ribbon(vec3 p, float phase, float thickness) {
       float a = atan(p.y, p.x);
-      float radius = .92 + (.09 + entropy * .12) * cos(a * 3.0 + phase);
-      float ridge = (.24 + entropy * .13) * sin(a * 3.0 + phase);
+      float radius = .92 + .135 * cos(a * 3.0 + phase);
+      float ridge = .29 * sin(a * 3.0 + phase);
       return (length(vec2(length(p.xy) - radius, (p.z - ridge) * 1.12)) - thickness) * .75;
     }
     float scene(vec3 p) {
       vec3 q = turn(p);
-      float thickness = .225 + entropy * .055;
       vec3 b = q;
       b.xy = rot(PI) * b.xy;
       b.yz = rot(1.32) * b.yz;
       b.xz = rot(.34) * b.xz;
-      float d = smin(ribbon(q, 0.0, thickness), ribbon(b, 1.1, thickness * .82), .075);
-      if (mode > .5 && mode < 1.5) {
-        float shell = abs(d + .048) - .048;
-        float cut = abs(sin(q.y * 10.0 + q.x * 2.2)) * .035;
-        d = shell + cut;
-      }
-      if (mode > 1.5) {
-        vec3 c = q;
-        c.xz = rot(1.55) * c.xz;
-        float ring = length(vec2(length(c.xy) - 1.31, c.z)) - .055;
-        d = min(d, ring * .8);
-      }
+      float d = smin(ribbon(q, 0.0, .255), ribbon(b, 1.1, .21), .09);
       vec3 moon = vec3(1.58 * cos(time * .11 + .6), .61 * sin(time * .11 + .6), .3);
       d = min(d, length(p - moon) - .105);
       vec3 moon2 = vec3(-1.43, -.75 + sin(time * .17) * .08, -.4);
-      d = min(d, length(p - moon2) - .052);
-      return d;
+      return min(d, length(p - moon2) - .052);
     }
     vec3 normal(vec3 p) {
-      vec2 e = vec2(.0022, -.0022);
+      vec2 e = vec2(.0012, -.0012);
       return normalize(e.xyy * scene(p + e.xyy) + e.yyx * scene(p + e.yyx) + e.yxy * scene(p + e.yxy) + e.xxx * scene(p + e.xxx));
     }
     vec3 studio(vec3 r) {
-      vec3 color = vec3(.12, .145, .19);
-      float upper = smoothstep(-.15, .8, r.y);
-      color += upper * vec3(.38, .44, .53);
-      float longLight = pow(max(0.0, 1.0 - abs(r.x * .72 + r.y * .5 - .13)), 24.0);
-      color += longLight * vec3(1.3, 1.4, 1.5);
-      float ribbonLight = pow(max(0.0, 1.0 - abs(r.y + r.z * .25 + .25)), 35.0);
-      color += ribbonLight * vec3(.47, .56, .91);
-      float darkBar = smoothstep(.91, .99, sin(r.y * 10.0 + r.z * 3.0));
-      color *= 1.0 - darkBar * .79;
-      float acid = pow(max(dot(r, normalize(vec3(-.7, .2, .6))), 0.0), 13.0);
-      color += acid * vec3(.72, .98, .16) * 1.3;
-      float pearl = pow(max(dot(r, normalize(vec3(.6, .8, 1.0))), 0.0), 18.0);
-      color += pearl * vec3(1.5, 1.24, 1.58);
-      return color;
+      // Colored light cards make the reflections legible as a polished solid.
+      vec3 color = mix(vec3(.018, .025, .16), vec3(.15, .012, .28), .5 + .5 * r.y);
+      float cyanCard = pow(max(0.0, 1.0 - abs(r.x * .64 + r.y * .56 - .19)), 25.0);
+      color += cyanCard * vec3(.08, 1.55, 2.25);
+      float pinkCard = pow(max(0.0, 1.0 - abs(r.y + r.z * .28 + .28)), 24.0);
+      color += pinkCard * vec3(2.0, .035, 1.16);
+      float cobaltCard = pow(max(dot(r, normalize(vec3(.82, -.45, .4))), 0.0), 5.0);
+      color += cobaltCard * vec3(.035, .18, 1.6);
+      float amberCard = pow(max(dot(r, normalize(vec3(-.58, .58, .6))), 0.0), 6.0);
+      color += amberCard * vec3(2.55, .65, .035);
+      float whiteEdge = pow(max(dot(r, normalize(vec3(-.3, .82, .65))), 0.0), 65.0);
+      color += whiteEdge * vec3(2.8, 2.45, 1.95);
+      float darkCard = smoothstep(.95, .995, sin(r.y * 7.0 + r.z * 2.0));
+      return color * (1.0 - darkCard * .65);
+    }
+    vec3 filmic(vec3 color) {
+      return clamp((color * (2.51 * color + .03)) / (color * (2.43 * color + .59) + .14), 0.0, 1.0);
     }
     void main() {
       vec2 st = gl_FragCoord.xy / resolution;
       float aspect = resolution.x / resolution.y;
       float mobile = 1.0 - step(.85, aspect);
-      vec2 center = mix(vec2(.65, .50), vec2(.52, .365), mobile);
+      vec2 center = mix(vec2(.66, .50), vec2(.51, .345), mobile);
+      float compactPortrait = smoothstep(.49, .57, aspect) * mobile;
+      center.y -= compactPortrait * .07;
       vec2 uv = (st - center) * vec2(aspect, 1.0);
       float view = mix(3.9, 5.8, mobile);
       vec3 ro = vec3(uv * view, 5.0);
       vec3 rd = vec3(0.0, 0.0, -1.0);
-      vec3 color = vec3(.0392, .0431, .051);
-      float halo = exp(-dot(uv, uv) * 7.0);
-      color += halo * vec3(.012, .016, .025);
-      // Sparse, static technical dust; no flicker or time-based noise.
-      vec2 grid = st * resolution / 3.0;
-      float dust = step(.9996, hash(floor(grid))) * (1.0 - smoothstep(0.0, .26, length(fract(grid) - .5)));
-      color += dust * vec3(.13, .17, .18);
+      // Broad, smooth light blooms; no animated noise or flickering particles.
+      vec3 background = vec3(.022, .016, .065);
+      float halo = exp(-dot(uv, uv) * 6.8);
+      background += halo * vec3(.085, .021, .17);
+      vec2 blueOffset = uv - vec2(.19, -.16);
+      background += exp(-dot(blueOffset, blueOffset) * 15.0) * vec3(.006, .06, .19);
+      vec2 roseOffset = uv - vec2(-.12, .23);
+      background += exp(-dot(roseOffset, roseOffset) * 17.0) * vec3(.14, .015, .07);
       float orbital = abs(length(uv * vec2(1.0, 1.8)) - .47);
-      color += exp(-orbital * 750.0) * .045 * vec3(.65, .77, .85);
+      float pixel = view / resolution.y;
+      background += (1.0 - smoothstep(.0005, max(.0015, pixel * .7), orbital)) * vec3(.022, .043, .065);
+      vec3 color = background;
       float bound = dot(ro.xy, ro.xy);
       if (bound < 3.8) {
         float t = max(0.0, ro.z - sqrt(max(0.0, 3.8 - bound)));
+        float epsilon = max(.00065, pixel * .32);
         bool hit = false;
         vec3 p = ro;
-        for (int i = 0; i < 56; i++) {
+        for (int i = 0; i < 84; i++) {
           p = ro + rd * t;
           float d = scene(p);
-          if (d < .0024) { hit = true; break; }
-          t += max(d * .8, .001);
+          if (d < epsilon) { hit = true; break; }
+          t += max(d * .86, .00045);
           if (t > 7.15) break;
         }
         if (hit) {
           vec3 n = normal(p);
           vec3 reflection = reflect(rd, n);
-          vec3 q = turn(p);
-          float bands = .5 + .5 * sin(atan(q.y, q.x) * 58.0 + q.z * 28.0);
-          float engraving = pow(bands, 18.0) * .14;
-          float fresnel = pow(1.0 - max(dot(n, -rd), 0.0), 3.0);
-          float occlusion = clamp(scene(p + n * .17) / .17, .42, 1.0);
-          vec3 metal = studio(reflection);
+          float facing = max(dot(n, -rd), 0.0);
+          float fresnel = pow(1.0 - facing, 2.8);
+          float occlusion = clamp(scene(p + n * .16) / .16, .3, 1.0);
           float diffuse = max(dot(n, normalize(vec3(-.6, .85, 1.4))), 0.0);
-          color = metal * (.48 + diffuse * .42) * occlusion;
-          color *= 1.0 - engraving;
-          color += fresnel * vec3(.25, .33, .44);
-          vec3 iridescence = .5 + .5 * cos(5.0 * n.z + vec3(0.0, 2.0, 4.0));
-          color += iridescence * .05;
-          color = color / (color + vec3(.48));
-          color = pow(color, vec3(.86));
+          vec3 iridescence = .5 + .5 * cos(4.5 * facing + p.y * .65 + vec3(.1, 2.2, 4.2));
+          vec3 metal = studio(reflection) * (.58 + diffuse * .42) * occlusion;
+          metal += pow(iridescence, vec3(1.5)) * (.12 + fresnel * .6);
+          // A narrow colored rim and bright softbox accent separate intertwined surfaces.
+          metal += fresnel * vec3(.05, .24, .45);
+          float specular = pow(max(dot(reflect(-normalize(vec3(-.6, .85, 1.4)), n), -rd), 0.0), 90.0);
+          metal += specular * vec3(1.5, 1.25, .9);
+          color = pow(filmic(metal * 1.12), vec3(.94));
+          float coverage = smoothstep(0.0, .14, facing);
+          color = mix(background, color, coverage);
         }
       }
-      color += (hash(gl_FragCoord.xy) - .5) / 255.0;
       gl_FragColor = vec4(color, 1.0);
     }
   `;
 
-  document
-    .querySelectorAll<HTMLElement>("[data-observatory]")
-    .forEach((element) => {
-      const canvas = element.querySelector<HTMLCanvasElement>("canvas");
-      const controls = element.querySelector<HTMLElement>(
-        ".observatory-controls",
-      );
-      const slider = element.querySelector<HTMLInputElement>("input");
-      const output = element.querySelector<HTMLOutputElement>("output");
-      if (!canvas || !controls || !slider || !output) return;
-      const surface = canvas;
-      const panel = controls;
-      const buttons = [
-        ...element.querySelectorAll<HTMLButtonElement>(
-          "[data-observatory-mode]",
-        ),
-      ];
-      const gl = surface.getContext("webgl", {
-        alpha: false,
-        antialias: false,
-        depth: false,
-        stencil: false,
-        preserveDrawingBuffer: false,
-        powerPreference: "low-power",
-      });
-      if (!gl) return;
-      const context = gl;
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-      const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
-      let program: WebGLProgram | null = null;
-      let geometry: WebGLBuffer | null = null;
-      let locations: Record<string, WebGLUniformLocation | null> = {};
-      let raf = 0;
-      let previous = 0;
-      let elapsed = 8;
-      let visible = true;
-      let lost = false;
-      let disposed = false;
-      let mode = 0;
-      let entropy = 0.38;
-      let pointerX = 0,
-        pointerY = 0,
-        easedX = 0,
-        easedY = 0;
-      let paused = document.documentElement.dataset.motion === "still";
+  document.querySelectorAll<HTMLElement>("[data-observatory]").forEach((element) => {
+    const canvas = element.querySelector<HTMLCanvasElement>("canvas");
+    if (!canvas) return;
+    const surface = canvas;
+    const gl = surface.getContext("webgl", {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      preserveDrawingBuffer: false,
+      powerPreference: "low-power",
+    });
+    if (!gl) return;
+    const context = gl;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
+    let program: WebGLProgram | null = null;
+    let geometry: WebGLBuffer | null = null;
+    let locations: Record<string, WebGLUniformLocation | null> = {};
+    let raf = 0;
+    let previous = 0;
+    let elapsed = 8;
+    let visible = true;
+    let lost = false;
+    let disposed = false;
+    let pageActive = true;
+    let pointerX = 0, pointerY = 0, easedX = 0, easedY = 0;
+    let paused = document.documentElement.dataset.motion === "still";
 
-      function compile(type: number, source: string) {
-        const shader = context.createShader(type);
-        if (!shader) return null;
-        context.shaderSource(shader, source);
-        context.compileShader(shader);
-        if (!context.getShaderParameter(shader, context.COMPILE_STATUS)) {
-          context.deleteShader(shader);
-          return null;
-        }
-        return shader;
+    function compile(type: number, source: string) {
+      const shader = context.createShader(type);
+      if (!shader) return null;
+      context.shaderSource(shader, source);
+      context.compileShader(shader);
+      if (!context.getShaderParameter(shader, context.COMPILE_STATUS)) {
+        context.deleteShader(shader);
+        return null;
       }
-      function setup() {
-        const vertex = compile(context.VERTEX_SHADER, vertexSource);
-        const fragment = compile(context.FRAGMENT_SHADER, fragmentSource);
-        if (!vertex || !fragment) {
-          if (vertex) context.deleteShader(vertex);
-          if (fragment) context.deleteShader(fragment);
-          return false;
-        }
-        program = context.createProgram();
-        if (!program) {
-          context.deleteShader(vertex);
-          context.deleteShader(fragment);
-          return false;
-        }
-        context.attachShader(program, vertex);
-        context.attachShader(program, fragment);
-        context.linkProgram(program);
+      return shader;
+    }
+    function setup() {
+      const vertex = compile(context.VERTEX_SHADER, vertexSource);
+      const fragment = compile(context.FRAGMENT_SHADER, fragmentSource);
+      if (!vertex || !fragment) {
+        if (vertex) context.deleteShader(vertex);
+        if (fragment) context.deleteShader(fragment);
+        return false;
+      }
+      program = context.createProgram();
+      if (!program) {
         context.deleteShader(vertex);
         context.deleteShader(fragment);
-        if (!context.getProgramParameter(program, context.LINK_STATUS)) {
-          context.deleteProgram(program);
-          program = null;
-          return false;
-        }
-        context.useProgram(program);
-        geometry = context.createBuffer();
-        if (!geometry) {
-          context.deleteProgram(program);
-          program = null;
-          return false;
-        }
-        context.bindBuffer(context.ARRAY_BUFFER, geometry);
-        context.bufferData(
-          context.ARRAY_BUFFER,
-          new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
-          context.STATIC_DRAW,
-        );
-        const position = context.getAttribLocation(program, "position");
-        context.enableVertexAttribArray(position);
-        context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
-        locations = Object.fromEntries(
-          ["resolution", "pointer", "time", "entropy", "mode"].map((name) => [
-            name,
-            context.getUniformLocation(program!, name),
-          ]),
-        );
-        return true;
+        return false;
       }
-      function canAnimate() {
-        return (
-          !disposed &&
-          !lost &&
-          !!program &&
-          visible &&
-          !document.hidden &&
-          !paused &&
-          !reduced.matches
-        );
+      context.attachShader(program, vertex);
+      context.attachShader(program, fragment);
+      context.linkProgram(program);
+      context.deleteShader(vertex);
+      context.deleteShader(fragment);
+      if (!context.getProgramParameter(program, context.LINK_STATUS)) {
+        context.deleteProgram(program);
+        program = null;
+        return false;
       }
-      function draw() {
-        if (
-          !program ||
-          lost ||
-          disposed ||
-          !visible ||
-          document.hidden ||
-          !surface.width ||
-          !surface.height
-        )
-          return;
-        context.viewport(0, 0, surface.width, surface.height);
-        context.uniform2f(locations.resolution, surface.width, surface.height);
-        context.uniform2f(locations.pointer, easedX, easedY);
-        context.uniform1f(locations.time, elapsed);
-        context.uniform1f(locations.mode, mode);
-        context.uniform1f(locations.entropy, entropy);
-        context.drawArrays(context.TRIANGLES, 0, 6);
+      context.useProgram(program);
+      geometry = context.createBuffer();
+      if (!geometry) {
+        context.deleteProgram(program);
+        program = null;
+        return false;
       }
-      function stop() {
-        cancelAnimationFrame(raf);
-        raf = 0;
-        previous = 0;
+      context.bindBuffer(context.ARRAY_BUFFER, geometry);
+      context.bufferData(
+        context.ARRAY_BUFFER,
+        new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+        context.STATIC_DRAW,
+      );
+      const position = context.getAttribLocation(program, "position");
+      context.enableVertexAttribArray(position);
+      context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
+      locations = Object.fromEntries(
+        ["resolution", "pointer", "time"].map((name) => [name, context.getUniformLocation(program!, name)]),
+      );
+      return true;
+    }
+    function canAnimate() {
+      return !disposed && !lost && !!program && pageActive && visible && !document.hidden && !paused && !reduced.matches;
+    }
+    function draw() {
+      if (!program || lost || disposed || !pageActive || !visible || document.hidden || !surface.width || !surface.height) return;
+      context.viewport(0, 0, surface.width, surface.height);
+      context.uniform2f(locations.resolution, surface.width, surface.height);
+      context.uniform2f(locations.pointer, easedX, easedY);
+      context.uniform1f(locations.time, elapsed);
+      context.drawArrays(context.TRIANGLES, 0, 6);
+    }
+    function stop() {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      previous = 0;
+    }
+    function sizeSurface() {
+      const bounds = element.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+      // Higher native resolution, with a hard GPU budget. Once the short intro
+      // finishes, render one sharper frame instead of maintaining an animation.
+      const animating = canAnimate();
+      const pixelBudget = animating ? 2_000_000 : 3_000_000;
+      const desiredRatio = Math.max(window.devicePixelRatio || 1, animating ? 1.25 : 1.5);
+      const ratio = Math.min(desiredRatio, 2, Math.sqrt(pixelBudget / (bounds.width * bounds.height)));
+      const width = Math.max(1, Math.floor(bounds.width * ratio));
+      const height = Math.max(1, Math.floor(bounds.height * ratio));
+      if (surface.width !== width || surface.height !== height) {
+        surface.width = width;
+        surface.height = height;
       }
-      function tick(now: number) {
-        raf = 0;
-        if (!canAnimate()) return;
-        if (!previous || now - previous >= 1000 / 30) {
-          elapsed += previous ? Math.min((now - previous) / 1000, 0.075) : 0;
-          previous = now;
-          easedX += (pointerX - easedX) * 0.07;
-          easedY += (pointerY - easedY) * 0.07;
-          draw();
-        }
-        raf = requestAnimationFrame(tick);
-      }
-      function synchronize() {
-        stop();
-        const running = canAnimate();
-        element.dataset.suspended = String(!running);
-        const reason = disposed
-          ? "disposed"
-          : lost
-            ? "context-lost"
-            : document.hidden
-              ? "hidden"
-              : !visible
-                ? "offscreen"
-                : reduced.matches
-                  ? "reduced-motion"
-                  : paused
-                    ? "paused"
-                    : "";
-        if (reason) element.dataset.suspensionReason = reason;
-        else delete element.dataset.suspensionReason;
-        if (running) raf = requestAnimationFrame(tick);
-        else if (visible && !document.hidden) draw();
-      }
-      function resize() {
-        const bounds = element.getBoundingClientRect();
-        if (!bounds.width || !bounds.height) return;
-        // Bounded render target: the scene does not scale GPU cost with a 4K display.
-        const mobile = bounds.width < 700;
-        const ratio = Math.min(
-          window.devicePixelRatio || 1,
-          mobile ? 0.85 : 1.25,
-          1400 / bounds.width,
-          1000 / bounds.height,
-        );
-        surface.width = Math.round(bounds.width * ratio);
-        surface.height = Math.round(bounds.height * ratio);
+    }
+    function tick(now: number) {
+      raf = 0;
+      if (!canAnimate()) return;
+      if (!previous || now - previous >= 1000 / 30) {
+        elapsed += previous ? Math.min((now - previous) / 1000, 0.075) : 0;
+        previous = now;
+        easedX += (pointerX - easedX) * 0.07;
+        easedY += (pointerY - easedY) * 0.07;
         draw();
       }
-      function pointer(event: PointerEvent) {
-        if (!finePointer.matches || !canAnimate()) return;
-        const bounds = element.getBoundingClientRect();
-        pointerX = Math.max(
-          -1,
-          Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1),
-        );
-        pointerY = Math.max(
-          -1,
-          Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1),
-        );
-      }
-      function motion(event: Event) {
-        const detail = (event as CustomEvent<{ paused: boolean }>).detail;
-        paused =
-          typeof detail?.paused === "boolean"
-            ? detail.paused
-            : document.documentElement.dataset.motion === "still";
-        synchronize();
-      }
-      function visibility() {
-        synchronize();
-      }
-      const resizeObserver = new ResizeObserver(resize);
-      const intersection = new IntersectionObserver(
-        ([entry]) => {
-          visible = entry.isIntersecting;
-          synchronize();
-        },
-        { threshold: 0 },
-      );
-      const motionObserver = new MutationObserver(() => {
-        paused = document.documentElement.dataset.motion === "still";
-        synchronize();
-      });
-      buttons.forEach((button) =>
-        button.addEventListener("click", () => {
-          mode = Number(button.dataset.observatoryMode);
-          buttons.forEach((item) =>
-            item.setAttribute("aria-pressed", String(item === button)),
-          );
-          draw();
-        }),
-      );
-      function syncEntropy() {
-        entropy = Math.max(0, Math.min(1, Number(slider.value) / 100));
-        output.value = slider.value;
+      raf = requestAnimationFrame(tick);
+    }
+    function synchronize() {
+      stop();
+      const running = canAnimate();
+      element.dataset.suspended = String(!running);
+      const reason = disposed ? "disposed" : lost ? "context-lost" : !pageActive || document.hidden ? "hidden" : !visible ? "offscreen" : reduced.matches ? "reduced-motion" : paused ? document.documentElement.dataset.motionReason || "paused" : "";
+      if (reason) element.dataset.suspensionReason = reason;
+      else delete element.dataset.suspensionReason;
+      if (!lost && !disposed && pageActive && visible && !document.hidden) {
+        sizeSurface();
         draw();
       }
-      slider.addEventListener("input", syncEntropy);
-      // Browsers may restore native form values after a Back navigation.
-      window.addEventListener("pageshow", () => {
-        syncEntropy();
-        synchronize();
-      });
-      syncEntropy();
-      surface.addEventListener("webglcontextlost", (event) => {
-        event.preventDefault();
-        lost = true;
-        synchronize();
-        element.removeAttribute("data-ready");
-        panel.hidden = true;
-      });
-      surface.addEventListener("webglcontextrestored", () => {
-        lost = false;
-        if (setup()) {
-          resize();
-          element.dataset.ready = "";
-          panel.hidden = false;
-          synchronize();
-        }
-      });
-      if (!setup()) return;
-      resize();
-      element.dataset.ready = "";
-      panel.hidden = false;
-      resizeObserver.observe(element);
-      intersection.observe(element);
-      motionObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["data-motion"],
-      });
-      document.addEventListener("pointermove", pointer, { passive: true });
-      document.addEventListener("visibilitychange", visibility);
-      window.addEventListener("observatory:motion", motion);
-      reduced.addEventListener("change", synchronize);
+      if (running) raf = requestAnimationFrame(tick);
+    }
+    function resize() {
+      if (lost || disposed) return;
+      sizeSurface();
+      draw();
+    }
+    function pointer(event: PointerEvent) {
+      if (!finePointer.matches || !canAnimate()) return;
+      const bounds = element.getBoundingClientRect();
+      pointerX = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1));
+      pointerY = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1));
+    }
+    function motion(event: Event) {
+      const detail = (event as CustomEvent<{ paused: boolean }>).detail;
+      paused = typeof detail?.paused === "boolean" ? detail.paused : document.documentElement.dataset.motion === "still";
       synchronize();
-      function dispose() {
-        disposed = true;
-        synchronize();
-        resizeObserver.disconnect();
-        intersection.disconnect();
-        motionObserver.disconnect();
-        document.removeEventListener("pointermove", pointer);
-        document.removeEventListener("visibilitychange", visibility);
-        window.removeEventListener("observatory:motion", motion);
-        reduced.removeEventListener("change", synchronize);
-        if (program) context.deleteProgram(program);
-        if (geometry) context.deleteBuffer(geometry);
-      }
-      document.addEventListener("astro:before-swap", dispose, { once: true });
+    }
+    function pagehide() {
+      pageActive = false;
+      synchronize();
+    }
+    function pageshow() {
+      pageActive = true;
+      paused = document.documentElement.dataset.motion === "still";
+      synchronize();
+    }
+    const resizeObserver = new ResizeObserver(resize);
+    const intersection = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      synchronize();
+    }, { threshold: 0 });
+    const motionObserver = new MutationObserver(() => {
+      paused = document.documentElement.dataset.motion === "still";
+      synchronize();
     });
+    surface.addEventListener("webglcontextlost", (event) => {
+      event.preventDefault();
+      lost = true;
+      synchronize();
+      element.removeAttribute("data-ready");
+    });
+    surface.addEventListener("webglcontextrestored", () => {
+      lost = false;
+      if (setup()) {
+        resize();
+        element.dataset.ready = "";
+        synchronize();
+      }
+    });
+    if (!setup()) return;
+    resize();
+    element.dataset.ready = "";
+    resizeObserver.observe(element);
+    intersection.observe(element);
+    motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
+    document.addEventListener("pointermove", pointer, { passive: true });
+    document.addEventListener("visibilitychange", synchronize);
+    window.addEventListener("observatory:motion", motion);
+    window.addEventListener("pagehide", pagehide);
+    window.addEventListener("pageshow", pageshow);
+    reduced.addEventListener("change", synchronize);
+    synchronize();
+    function dispose() {
+      disposed = true;
+      synchronize();
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      motionObserver.disconnect();
+      document.removeEventListener("pointermove", pointer);
+      document.removeEventListener("visibilitychange", synchronize);
+      window.removeEventListener("observatory:motion", motion);
+      window.removeEventListener("pagehide", pagehide);
+      window.removeEventListener("pageshow", pageshow);
+      reduced.removeEventListener("change", synchronize);
+      if (program) context.deleteProgram(program);
+      if (geometry) context.deleteBuffer(geometry);
+    }
+    document.addEventListener("astro:before-swap", dispose, { once: true });
+  });
 </script>

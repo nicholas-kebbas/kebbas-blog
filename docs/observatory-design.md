@@ -106,3 +106,7 @@ Owner feedback: the copy sounded artificial. Removed the personal-observatory la
 ## Single-screen revision — October 26, 2026
 
 Owner requested no scrolling and a direct Granularity Games link instead of Play. The homepage is now one viewport with the sculpture, Nick’s name, a direct X contact invitation, and links to Granularity Games, Housing Alpha, and GitHub. Removed the lower project/art/play/contact sections and their unused field/parallax script. Original image files remain in the repository but are not requested by the homepage. Granularity Games’ destination is preserved from the former article and verified over HTTPS.
+
+## Color and detail revision — October 26, 2026
+
+Owner requested stronger color, sharper imagery, and no user toggles. Removed the shape, entropy, and motion controls. The sculpture now uses saturated lighting and a higher-density render target; the name and link transition use the same warm/cool spectrum. The scene runs a short opening, then renders a sharper still frame. OS reduced motion and Escape remain available without a control panel. Link-triggered transitions still run after the opening ends unless reduced motion or Escape has explicitly stopped motion. The single-screen layout and project destinations remain unchanged.

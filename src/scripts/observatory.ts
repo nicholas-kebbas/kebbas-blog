@@ -1,41 +1,42 @@
-// Shared motion preference is session-only. No storage, telemetry, or network requests.
+// The opening animation settles within five seconds. No visible controls or storage.
 const root = document.documentElement;
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 const finePointer = window.matchMedia("(pointer: fine)");
-const toggle = document.querySelector<HTMLButtonElement>(
-  "[data-motion-toggle]",
-);
+let introComplete = false;
 let userPaused = false;
-const isPaused = () => userPaused || reduced.matches;
+const isPaused = () => userPaused || reduced.matches || introComplete;
 function syncMotion() {
   const paused = isPaused();
+  root.dataset.motionReason = reduced.matches
+    ? "reduced-motion"
+    : userPaused
+      ? "paused"
+      : introComplete
+        ? "intro-complete"
+        : "opening";
   root.dataset.motion = paused ? "still" : "full";
-  if (toggle) {
-    toggle.setAttribute("aria-pressed", String(paused));
-    toggle.setAttribute(
-      "aria-label",
-      reduced.matches
-        ? "Motion disabled by your device preference"
-        : paused
-          ? "Resume motion"
-          : "Pause motion",
-    );
-    toggle.disabled = reduced.matches;
-    const label = toggle.querySelector("[data-motion-label]");
-    if (label) label.textContent = paused ? "Motion off" : "Motion on";
-  }
   window.dispatchEvent(
     new CustomEvent("observatory:motion", { detail: { paused } }),
   );
 }
-if (toggle) {
-  toggle.hidden = false;
-  toggle.addEventListener("click", () => {
-    userPaused = !userPaused;
-    syncMotion();
-  });
-}
+const introTimer = window.setTimeout(() => {
+  introComplete = true;
+  syncMotion();
+}, 4500);
 reduced.addEventListener("change", syncMotion);
+// Escape also stops the opening scene; link transitions keep their existing Escape behavior.
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    userPaused = true;
+    syncMotion();
+  }
+});
+window.addEventListener("pagehide", () => {
+  window.clearTimeout(introTimer);
+  introComplete = true;
+  syncMotion();
+});
+window.addEventListener("pageshow", syncMotion);
 syncMotion();
 
 // Pointer accent only; retain the system cursor and native link behavior.
