@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kebbas.com/sitemap-index.xml

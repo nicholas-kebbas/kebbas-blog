@@ -1,62 +1,29 @@
-# Astro Starter Kit: Blog
+# Nick Kebbas — kebbas.com
+
+An experimental personal site built with static Astro. Oversized Syne typography, a responsive generative canvas sculpture, selected work, and simple social links. No account, analytics, database, paid API, or runtime server is required.
+
+## Develop
 
 ```sh
-npm create astro@latest -- --template blog
+npm ci
+npm run dev
+npm run build
+npm run preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Use Node 24 (matching the existing Vercel project). All site content lives in `src/pages/index.astro`. Global styles are in `src/styles/global.css`; the interactive artwork is isolated in `src/components/SignalSculpture.astro`.
 
-Features:
+## Accessibility and performance
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+- Static HTML content works without JavaScript; the artwork has an inline SVG fallback.
+- Artwork stops offscreen and in background tabs, caps pixel ratio and frame rate, and supports a pause button and the operating system's reduced-motion setting.
+- Keyboard navigation, visible focus, skip link, and touch-sized controls.
+- Fonts are self-hosted. Syne is licensed under the included SIL Open Font License.
 
-## 🚀 Project Structure
+## Publishing
 
-Inside of your Astro project, you'll see the following folders and files:
+Production domain: **kebbas.com**, existing Vercel project `kebbas-blog` (`prj_kQtfNYsdZ7dOZdD9JBuMWblSiRjM`).
 
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
+The original source was `gg-ai-ops/kebbas-blog`. The redesign is maintained in `nicholas-kebbas/kebbas-blog` because the currently connected GitHub account cannot push to the original repository. The Vercel project's existing Git connection is unchanged; pushing this fork alone does not establish automatic production deployment. Deploy a reviewed source commit to the existing project through the authorized Vercel connection. Do not create another hosting project or move the domain.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+The former gaming article and RSS feed were retired. `/blog` redirects to the homepage; the removed article and RSS URLs return the site's 404 page. Git history retains the old content.

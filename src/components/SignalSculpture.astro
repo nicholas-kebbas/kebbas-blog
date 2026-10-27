@@ -1,0 +1,352 @@
+---
+const filaments = Array.from({ length: 30 }, (_, index) => index);
+---
+
+<div class="signal-sculpture" data-signal-sculpture>
+  <div class="sculpture-halo" aria-hidden="true"></div>
+  <svg class="sculpture-fallback" viewBox="0 0 800 650" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="signal-filament" x1="150" y1="110" x2="600" y2="560" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#ffb98a" />
+        <stop offset=".45" stop-color="#fb693e" />
+        <stop offset="1" stop-color="#873323" />
+      </linearGradient>
+    </defs>
+    <g transform="translate(400 306) rotate(-28)" stroke="url(#signal-filament)" stroke-width=".8">
+      {filaments.map((index) => (
+        <ellipse
+          rx={190 + Math.cos(index / 30 * Math.PI * 2) * 65}
+          ry={135 + Math.sin(index / 30 * Math.PI * 2) * 65}
+          transform={`rotate(${Math.sin(index / 30 * Math.PI * 2) * 17})`}
+          opacity={.45 + index / 60}
+        />
+      ))}
+    </g>
+  </svg>
+  <canvas class="sculpture-canvas" aria-hidden="true"></canvas>
+
+  <div class="sculpture-controls" hidden>
+    <div class="sculpture-modes" role="group" aria-label="Change the artwork’s shape">
+      <button type="button" data-form="orbit" aria-pressed="true">Orbit</button>
+      <button type="button" data-form="field" aria-pressed="false">Field</button>
+      <button type="button" data-form="wave" aria-pressed="false">Wave</button>
+    </div>
+    <button class="sculpture-pause" type="button" data-motion aria-pressed="false" aria-label="Pause artwork motion">
+      <span class="motion-symbol" aria-hidden="true">Ⅱ</span>
+      <span data-motion-label>Pause motion</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .signal-sculpture {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    isolation: isolate;
+  }
+
+  .sculpture-halo {
+    position: absolute;
+    inset: 10% 10% 12%;
+    background: radial-gradient(ellipse, rgb(220 70 35 / 9%), rgb(196 59 25 / 3%) 44%, transparent 69%);
+    pointer-events: none;
+  }
+
+  .sculpture-fallback,
+  .sculpture-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .sculpture-canvas { opacity: 0; }
+  .signal-sculpture[data-ready] .sculpture-canvas { opacity: 1; }
+  .signal-sculpture[data-ready] .sculpture-fallback { visibility: hidden; }
+
+  .sculpture-controls {
+    position: absolute;
+    z-index: 2;
+    bottom: 24px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #aeaaa1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .025em;
+  }
+
+  .sculpture-controls[hidden] { display: none; }
+  .sculpture-modes { display: flex; border: 1px solid #ffffff20; border-radius: 4px; padding: 3px; background: #11110fdd; }
+  .sculpture-controls button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    padding: 9px 10px;
+    min-height: 36px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background .15s, color .15s;
+  }
+
+  .sculpture-modes button[aria-pressed='true'] { background: #ff74471c; color: #ff946d; }
+  .sculpture-controls button:hover { color: #f4efe5; }
+  .sculpture-controls button:focus-visible { outline: 2px solid #ff946d; outline-offset: 4px; }
+  .sculpture-controls .sculpture-pause { display: flex; align-items: center; gap: 7px; background: #11110fbf; }
+  .sculpture-controls button:disabled { opacity: .65; cursor: default; }
+  .motion-symbol { font-family: system-ui, sans-serif; width: 10px; font-size: 10px; }
+
+  @media (max-width: 600px) {
+    .sculpture-controls { right: 16px; bottom: 12px; gap: 7px; font-size: 9px; }
+    .sculpture-controls button { min-height: 40px; padding-inline: 9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sculpture-controls button { transition: none; }
+  }
+</style>
+
+<script>
+  type Form = 'orbit' | 'field' | 'wave';
+
+  document.querySelectorAll<HTMLElement>('[data-signal-sculpture]').forEach((element) => {
+    const canvas = element.querySelector<HTMLCanvasElement>('canvas');
+    const context = canvas?.getContext('2d', { alpha: true });
+    const controls = element.querySelector<HTMLElement>('.sculpture-controls');
+    const motionButton = element.querySelector<HTMLButtonElement>('[data-motion]');
+    const motionLabel = element.querySelector<HTMLElement>('[data-motion-label]');
+    const motionSymbol = element.querySelector<HTMLElement>('.motion-symbol');
+    if (!canvas || !context || !controls || !motionButton || !motionLabel || !motionSymbol) return;
+
+    const ctx = context;
+    const surface = canvas;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const formButtons = [...element.querySelectorAll<HTMLButtonElement>('[data-form]')];
+    const TAU = Math.PI * 2;
+    const tracks = 64;
+    const steps = 112;
+    const total = tracks * steps;
+    const x = new Float32Array(total);
+    const y = new Float32Array(total);
+    const z = new Float32Array(total);
+    const sx = new Float32Array(total);
+    const sy = new Float32Array(total);
+    const depth = new Float32Array(total);
+    const colors = Array.from({ length: 12 }, (_, index) => {
+      const light = index / 11;
+      return `rgba(${Math.round(176 + light * 79)},${Math.round(63 + light * 88)},${Math.round(35 + light * 65)},${.17 + light * .64})`;
+    });
+    let form: Form = 'orbit';
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
+    let time = 0;
+    let lastTime = 0;
+    let frame = 0;
+    let paused = false;
+    let visible = true;
+    let destroyed = false;
+    let pointerX = 0;
+    let pointerY = 0;
+    let easedX = 0;
+    let easedY = 0;
+
+    function buildGeometry() {
+      for (let row = 0; row < tracks; row++) {
+        const v = row / tracks * TAU;
+        for (let column = 0; column < steps; column++) {
+          const u = column / steps * TAU;
+          const index = row * steps + column;
+          if (form === 'wave') {
+            const along = (column / (steps - 1) - .5) * 3.5;
+            const across = (row / (tracks - 1) - .5) * 2.4;
+            x[index] = along;
+            y[index] = across * .70 + .20 * Math.sin(along * 1.8);
+            z[index] = .53 * Math.sin(along * 2.4 + across * 1.55) + .12 * across * across;
+          } else if (form === 'field') {
+            const radius = .68 + .12 * Math.cos(3 * u);
+            const tube = .72 + .08 * Math.sin(3 * u);
+            const twist = v + 2 * u;
+            x[index] = (radius + tube * Math.cos(twist)) * Math.cos(u);
+            y[index] = (radius + tube * Math.cos(twist)) * Math.sin(u);
+            z[index] = tube * Math.sin(twist) * 1.1;
+          } else {
+            const radius = 1.1 + .09 * Math.cos(3 * u);
+            const tube = .41 + .07 * Math.sin(3 * u);
+            const twist = v + 3 * u;
+            x[index] = (radius + tube * Math.cos(twist)) * Math.cos(u);
+            y[index] = (radius + tube * Math.cos(twist)) * Math.sin(u);
+            z[index] = tube * Math.sin(twist);
+          }
+        }
+      }
+    }
+
+    function draw() {
+      if (!width || !height || destroyed) return;
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      const staticView = paused || reducedMotion.matches;
+      easedX += (pointerX - easedX) * .055;
+      easedY += (pointerY - easedY) * .055;
+      const angleX = (form === 'wave' ? .91 : 1.04) + Math.sin(time * .14) * .12 + (staticView ? 0 : easedY * .13);
+      const angleY = .26 + Math.sin(time * .10) * .25 + (staticView ? 0 : easedX * .18);
+      const angleZ = -.42 + time * .045;
+      const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+      const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+      const cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);
+      const scale = Math.min(width * .265, height * .35);
+      const centerX = width * .52;
+      const centerY = height * .465;
+      const paths = Array.from({ length: 12 }, () => new Path2D());
+
+      for (let index = 0; index < total; index++) {
+        const yy = y[index] * cosX - z[index] * sinX;
+        const zz = y[index] * sinX + z[index] * cosX;
+        const xx = x[index] * cosY + zz * sinY;
+        const rotatedZ = -x[index] * sinY + zz * cosY;
+        const perspective = 4.8 / (4.8 - rotatedZ);
+        sx[index] = centerX + (xx * cosZ - yy * sinZ) * scale * perspective;
+        sy[index] = centerY + (xx * sinZ + yy * cosZ) * scale * perspective;
+        depth[index] = rotatedZ;
+      }
+
+      // Draw by depth, so the bright front filaments sit over the quieter back.
+      for (let row = 0; row < tracks; row++) {
+        const end = form === 'wave' ? steps - 1 : steps;
+        for (let column = 0; column < end; column++) {
+          const index = row * steps + column;
+          const next = row * steps + (column + 1) % steps;
+          const bucket = Math.max(0, Math.min(11, Math.floor(((depth[index] + depth[next]) * .5 + 1.65) / 3.3 * 12)));
+          paths[bucket].moveTo(sx[index], sy[index]);
+          paths[bucket].lineTo(sx[next], sy[next]);
+        }
+      }
+
+      ctx.lineCap = 'round';
+      for (let index = 0; index < paths.length; index++) {
+        ctx.lineWidth = .48 + index / 11 * .33;
+        ctx.strokeStyle = colors[index];
+        ctx.stroke(paths[index]);
+      }
+
+      // Sparse luminous pinpoints emphasize the volume without a particle storm.
+      ctx.fillStyle = 'rgba(255, 186, 132, .72)';
+      for (let row = 0; row < tracks; row += 8) {
+        const index = row * steps + (row * 7 + 11) % steps;
+        if (depth[index] > .35) {
+          ctx.beginPath();
+          ctx.arc(sx[index], sy[index], .9, 0, TAU);
+          ctx.fill();
+        }
+      }
+      element.setAttribute('data-ready', '');
+    }
+
+    function canAnimate() {
+      return !destroyed && !paused && !reducedMotion.matches && visible && !document.hidden;
+    }
+
+    function tick(now: number) {
+      frame = 0;
+      if (!canAnimate()) return;
+      if (!lastTime) lastTime = now;
+      if (now - lastTime >= 1000 / 30) {
+        time += Math.min(now - lastTime, 100) / 1000;
+        lastTime = now;
+        draw();
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function syncAnimation() {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      lastTime = 0;
+      if (canAnimate()) frame = requestAnimationFrame(tick);
+    }
+
+    function updateMotionControl() {
+      const reduced = reducedMotion.matches;
+      motionButton!.disabled = reduced;
+      motionButton!.setAttribute('aria-pressed', String(paused || reduced));
+      motionButton!.setAttribute('aria-label', reduced ? 'Artwork motion follows your reduced motion preference' : paused ? 'Resume artwork motion' : 'Pause artwork motion');
+      motionLabel!.textContent = reduced ? 'Still mode' : paused ? 'Play motion' : 'Pause motion';
+      motionSymbol!.textContent = paused || reduced ? '▷' : 'Ⅱ';
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      const rect = element.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      surface.width = Math.round(width * pixelRatio);
+      surface.height = Math.round(height * pixelRatio);
+      draw();
+    });
+
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      syncAnimation();
+    }, { threshold: 0 });
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (!finePointer.matches || paused || reducedMotion.matches) return;
+      const rect = element.getBoundingClientRect();
+      pointerX = (event.clientX - rect.left) / rect.width - .5;
+      pointerY = (event.clientY - rect.top) / rect.height - .5;
+    };
+    const onPointerLeave = () => { pointerX = 0; pointerY = 0; };
+    const onPreferenceChange = () => {
+      updateMotionControl();
+      draw();
+      syncAnimation();
+    };
+    const onMotionClick = () => {
+      paused = !paused;
+      updateMotionControl();
+      syncAnimation();
+    };
+    const onFormClick = (event: Event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      form = button.dataset.form as Form;
+      formButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      buildGeometry();
+      draw();
+    };
+
+    buildGeometry();
+    updateMotionControl();
+    controls.hidden = false;
+    resizeObserver.observe(element);
+    intersectionObserver.observe(element);
+    formButtons.forEach((button) => button.addEventListener('click', onFormClick));
+    motionButton.addEventListener('click', onMotionClick);
+    element.addEventListener('pointermove', onPointerMove);
+    element.addEventListener('pointerleave', onPointerLeave);
+    reducedMotion.addEventListener('change', onPreferenceChange);
+    document.addEventListener('visibilitychange', syncAnimation);
+    syncAnimation();
+
+    document.addEventListener('astro:before-swap', () => {
+      destroyed = true;
+      if (frame) cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      formButtons.forEach((button) => button.removeEventListener('click', onFormClick));
+      motionButton.removeEventListener('click', onMotionClick);
+      element.removeEventListener('pointermove', onPointerMove);
+      element.removeEventListener('pointerleave', onPointerLeave);
+      reducedMotion.removeEventListener('change', onPreferenceChange);
+      document.removeEventListener('visibilitychange', syncAnimation);
+    }, { once: true });
+  });
+</script>

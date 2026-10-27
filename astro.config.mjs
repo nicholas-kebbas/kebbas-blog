@@ -1,11 +1,12 @@
 // @ts-check
 
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import sitemap from "@astrojs/sitemap";
+import { defineConfig } from "astro/config";
 
-// https://astro.build/config
 export default defineConfig({
-	site: 'https://kebbas.com',
-	integrations: [mdx(), sitemap()],
+  site: "https://kebbas.com",
+  output: "static",
+  // Preserve HTML-aware spacing across inline elements after the Astro 7 upgrade.
+  compressHTML: true,
+  integrations: [sitemap()],
 });
