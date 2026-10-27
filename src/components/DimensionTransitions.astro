@@ -1,0 +1,495 @@
+---
+const rings = Array.from({ length: 18 }, (_, index) => index);
+const rays = Array.from(
+  { length: 32 },
+  (_, index) => (index / 32) * Math.PI * 2,
+);
+---
+
+<div class="dimension-portal" data-dimension-portal aria-hidden="true" hidden>
+  <div class="portal-field" data-portal-field>
+    <div class="portal-grid"></div>
+    <svg
+      class="portal-tunnel"
+      viewBox="0 0 1400 1000"
+      fill="none"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <g transform="translate(700 500) rotate(-22)">
+        {rings.map((index) => (
+          <ellipse
+            rx={80 + index * index * 4.8}
+            ry={40 + index * index * 2.9}
+            stroke="currentColor"
+            stroke-width={index % 3 === 0 ? 1 : 0.5}
+            opacity={0.18 + index / 40}
+          />
+        ))}
+        {rays.map((angle) => (
+          <path
+            d={`M ${Math.cos(angle) * 80} ${Math.sin(angle) * 40} L ${Math.cos(angle) * 1900} ${Math.sin(angle) * 1100}`}
+            stroke="currentColor"
+            stroke-width=".5"
+            opacity=".25"
+          />
+        ))}
+        <ellipse rx="82" ry="42" fill="#141510" stroke="currentColor" />
+      </g>
+    </svg>
+    <div class="portal-orbit portal-orbit-a"></div>
+    <div class="portal-orbit portal-orbit-b"></div>
+    <div class="portal-registration portal-registration-top">
+      <span>NK / INTERDIMENSIONAL TRANSIT</span>
+      <span data-portal-index>01—05</span>
+    </div>
+    <div class="portal-heading">
+      <span class="portal-heading-echo" data-portal-echo>
+        Selected work
+      </span>
+      <span data-portal-title>Selected work</span>
+    </div>
+    <div class="portal-registration portal-registration-bottom">
+      <span>LEAVING THIS FRAME</span>
+      <span>ENTERING ANOTHER ↗</span>
+    </div>
+  </div>
+  <div class="portal-blade portal-blade-a" data-portal-blade-a></div>
+  <div class="portal-blade portal-blade-b" data-portal-blade-b></div>
+</div>
+
+<style>
+  .dimension-portal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    overflow: hidden;
+    pointer-events: none;
+    color: #e5ebbb;
+    isolation: isolate;
+    contain: layout paint;
+  }
+  .dimension-portal[hidden] {
+    display: none !important;
+  }
+  .portal-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #141510;
+    clip-path: circle(0% at 50% 50%);
+  }
+  .portal-grid {
+    position: absolute;
+    inset: -50%;
+    opacity: 0.12;
+    transform: rotate(-22deg);
+    background-image:
+      linear-gradient(#dce7a9 1px, transparent 1px),
+      linear-gradient(90deg, #dce7a9 1px, transparent 1px);
+    background-size: 95px 95px;
+  }
+  .portal-tunnel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    color: #c7ff57;
+    opacity: 0.74;
+  }
+  .portal-orbit {
+    position: absolute;
+    width: 90vw;
+    height: 90vw;
+    left: 5vw;
+    top: calc(50% - 45vw);
+    border: 1px solid #dbe3b333;
+    border-radius: 50%;
+  }
+  .portal-orbit-a {
+    transform: rotate(-22deg) scaleY(0.48);
+  }
+  .portal-orbit-b {
+    transform: rotate(68deg) scaleY(0.48);
+  }
+  .portal-heading {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    padding: 0 4vw;
+    box-sizing: border-box;
+    transform: translateY(-50%) rotate(-7deg);
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Syne, Arial, sans-serif;
+    font-size: clamp(56px, 10.5vw, 190px);
+    font-weight: 700;
+    letter-spacing: -0.07em;
+    line-height: 0.85;
+  }
+  .portal-heading > span {
+    display: block;
+  }
+  .portal-heading > span:not(.portal-heading-echo) {
+    position: relative;
+    color: #f1f0df;
+    text-shadow: 0 2px 26px #141510;
+  }
+  .portal-heading-echo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.52em;
+    color: transparent;
+    -webkit-text-stroke: 1px #c7ff5766;
+    transform: translateX(-3vw);
+  }
+  .portal-registration {
+    position: absolute;
+    z-index: 2;
+    left: 4vw;
+    right: 4vw;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-family: "Courier New", monospace;
+    font-size: clamp(8px, 1vw, 11px);
+    letter-spacing: 0.16em;
+  }
+  .portal-registration-top {
+    top: max(24px, env(safe-area-inset-top));
+  }
+  .portal-registration-bottom {
+    bottom: max(24px, env(safe-area-inset-bottom));
+  }
+  .portal-blade {
+    position: absolute;
+    top: -30%;
+    width: 11vw;
+    min-width: 36px;
+    height: 160%;
+    background: #f1f0df;
+    transform: translateX(-180vw) rotate(-22deg);
+    transform-origin: 50% 50%;
+    opacity: 0.96;
+  }
+  .portal-blade-a {
+    left: 38%;
+  }
+  .portal-blade-b {
+    left: 54%;
+    width: 2px;
+    min-width: 2px;
+    background: #c7ff57;
+  }
+  @media (max-width: 600px) {
+    .portal-heading {
+      font-size: clamp(48px, 15vw, 90px);
+      overflow-wrap: anywhere;
+    }
+    .portal-registration {
+      letter-spacing: 0.08em;
+    }
+    .portal-registration-bottom span:last-child {
+      text-align: right;
+    }
+    .portal-grid {
+      background-size: 60px 60px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dimension-portal {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  import {
+    isPlainPortalActivation,
+    resolvePortalDestination,
+    type PortalDestination,
+  } from "../lib/portal-navigation";
+
+  const overlay = document.querySelector<HTMLElement>(
+    "[data-dimension-portal]",
+  );
+  const field = overlay?.querySelector<HTMLElement>("[data-portal-field]");
+  const heading = overlay?.querySelector<HTMLElement>(".portal-heading");
+  const tunnel = overlay?.querySelector<SVGElement>(".portal-tunnel");
+  const title = overlay?.querySelector<HTMLElement>("[data-portal-title]");
+  const echo = overlay?.querySelector<HTMLElement>("[data-portal-echo]");
+  const bladeA = overlay?.querySelector<HTMLElement>("[data-portal-blade-a]");
+  const bladeB = overlay?.querySelector<HTMLElement>("[data-portal-blade-b]");
+
+  if (
+    overlay &&
+    field &&
+    heading &&
+    tunnel &&
+    title &&
+    echo &&
+    bladeA &&
+    bladeB
+  ) {
+    const surface = overlay;
+    const veil = field;
+    const chapter = heading;
+    const geometry = tunnel;
+    const headingText = title;
+    const echoText = echo;
+    const bladeOne = bladeA;
+    const bladeTwo = bladeB;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const listeners = new AbortController();
+    let animations: Animation[] = [];
+    let pending: PortalDestination | null = null;
+    let navigated = false;
+    let transaction = 0;
+    let recovery = 0;
+    let coverTimer = 0;
+    let revealTimer = 0;
+
+    function reset() {
+      transaction += 1;
+      window.clearTimeout(recovery);
+      window.clearTimeout(coverTimer);
+      window.clearTimeout(revealTimer);
+      animations.forEach((animation) => animation.cancel());
+      animations = [];
+      surface.hidden = true;
+      document.documentElement.removeAttribute("data-portal-active");
+      pending = null;
+      navigated = false;
+    }
+
+    function navigate(destination: PortalDestination) {
+      if (destination.kind === "page") {
+        window.location.assign(destination.url.href);
+        return;
+      }
+      const section = document.getElementById(destination.id);
+      if (!section) {
+        window.location.assign(destination.url.href);
+        return;
+      }
+      if (window.location.href !== destination.url.href)
+        window.history.pushState(null, "", destination.url.href);
+      // Setting scroll behavior explicitly also overrides any global smooth-scroll rule.
+      section.scrollIntoView({ behavior: "instant", block: "start" });
+      const focusTarget = section.matches(
+        "a, button, input, select, textarea, [tabindex]",
+      )
+        ? section
+        : section.querySelector<HTMLElement>("h1, h2") || section;
+      const temporary = !focusTarget.hasAttribute("tabindex");
+      if (temporary) focusTarget.setAttribute("tabindex", "-1");
+      focusTarget.focus({ preventScroll: true });
+      if (temporary)
+        focusTarget.addEventListener(
+          "blur",
+          () => focusTarget.removeAttribute("tabindex"),
+          { once: true },
+        );
+    }
+
+    function finish() {
+      const destination = pending;
+      const shouldNavigate = destination && !navigated;
+      reset();
+      if (shouldNavigate) navigate(destination);
+    }
+
+    function animate(
+      element: Element,
+      frames: Keyframe[],
+      options: KeyframeAnimationOptions,
+    ) {
+      const animation = element.animate(frames, { fill: "both", ...options });
+      animations.push(animation);
+      return animation;
+    }
+
+    function begin(destination: PortalDestination, label: string) {
+      reset();
+      pending = destination;
+      const active = transaction;
+      surface.hidden = false;
+      document.documentElement.setAttribute("data-portal-active", "");
+      headingText.textContent = label;
+      echoText.textContent = label;
+      // This recovery is independent of animation events and cannot strand a visible overlay.
+      recovery = window.setTimeout(finish, 1350);
+      try {
+        animate(
+          veil,
+          [
+            { clipPath: "circle(0% at 50% 50%)" },
+            { clipPath: "circle(150% at 50% 50%)" },
+          ],
+          { duration: 420, easing: "cubic-bezier(.72,0,.18,1)" },
+        );
+        animate(
+          geometry,
+          [
+            { transform: "scale(.48) rotate(-14deg)", opacity: 0 },
+            { transform: "scale(1.08) rotate(4deg)", opacity: 0.74 },
+          ],
+          { duration: 900, easing: "cubic-bezier(.12,.6,.2,1)" },
+        );
+        animate(
+          chapter,
+          [
+            { transform: "translateY(80%) rotate(-19deg)", opacity: 0 },
+            {
+              transform: "translateY(-50%) rotate(-7deg)",
+              opacity: 1,
+              offset: 0.48,
+            },
+            { transform: "translateY(-62%) rotate(-3deg)", opacity: 1 },
+          ],
+          { duration: 950, easing: "cubic-bezier(.16,.7,.2,1)" },
+        );
+        animate(
+          bladeOne,
+          [
+            { transform: "translateX(-140vw) rotate(-22deg)" },
+            { transform: "translateX(145vw) rotate(-22deg)" },
+          ],
+          { duration: 900, easing: "cubic-bezier(.7,0,.15,1)" },
+        );
+        animate(
+          bladeTwo,
+          [
+            { transform: "translateX(-140vw) rotate(-22deg)" },
+            { transform: "translateX(145vw) rotate(-22deg)" },
+          ],
+          { duration: 950, delay: 35, easing: "cubic-bezier(.7,0,.15,1)" },
+        );
+        coverTimer = window.setTimeout(() => {
+          if (active !== transaction || !pending) return;
+          try {
+            navigated = true;
+            navigate(pending);
+            // Give an external navigation a covered frame; still recover if it is cancelled.
+            if (pending.kind === "page") return;
+            animate(
+              veil,
+              [
+                { clipPath: "circle(150% at 50% 50%)" },
+                { clipPath: "circle(0% at 50% 50%)" },
+              ],
+              { duration: 520, easing: "cubic-bezier(.65,0,.25,1)" },
+            );
+            revealTimer = window.setTimeout(reset, 530);
+          } catch {
+            reset();
+          }
+        }, 430);
+      } catch {
+        finish();
+      }
+    }
+
+    document.addEventListener(
+      "click",
+      (event: MouseEvent) => {
+        const link =
+          event.target instanceof Element
+            ? event.target.closest<HTMLAnchorElement>("a[href]")
+            : null;
+        // A native link (particularly the keyboard skip link) must not be overridden
+        // by a destination that was waiting underneath an earlier transition.
+        if (
+          pending &&
+          link &&
+          !link.hasAttribute("data-portal") &&
+          !event.defaultPrevented
+        )
+          reset();
+        const target = link?.hasAttribute("data-portal") ? link : null;
+        if (
+          !target ||
+          !isPlainPortalActivation({
+            button: event.button,
+            defaultPrevented: event.defaultPrevented,
+            altKey: event.altKey,
+            ctrlKey: event.ctrlKey,
+            metaKey: event.metaKey,
+            shiftKey: event.shiftKey,
+            target: target.getAttribute("target"),
+            download: target.hasAttribute("download"),
+          })
+        )
+          return;
+        const destination = resolvePortalDestination(
+          target.getAttribute("href") || "",
+          window.location.href,
+        );
+        if (
+          !destination ||
+          (destination.kind === "anchor" &&
+            !document.getElementById(destination.id))
+        )
+          return;
+        if (
+          reduced.matches ||
+          document.documentElement.dataset.motion === "still" ||
+          typeof Element.prototype.animate !== "function"
+        ) {
+          if (destination.kind === "anchor") {
+            event.preventDefault();
+            navigate(destination);
+          }
+          return;
+        }
+        event.preventDefault();
+        if (pending) return;
+        begin(
+          destination,
+          (target.dataset.portal || target.textContent || "Another dimension")
+            .trim()
+            .slice(0, 64),
+        );
+      },
+      { signal: listeners.signal },
+    );
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape" && pending) finish();
+      },
+      { signal: listeners.signal },
+    );
+    window.addEventListener(
+      "observatory:motion",
+      (event) => {
+        if (
+          (event as CustomEvent<{ paused?: boolean }>).detail?.paused &&
+          pending
+        )
+          finish();
+      },
+      { signal: listeners.signal },
+    );
+    reduced.addEventListener(
+      "change",
+      () => {
+        if (reduced.matches && pending) finish();
+      },
+      { signal: listeners.signal },
+    );
+    window.addEventListener("pageshow", reset, { signal: listeners.signal });
+    window.addEventListener("pagehide", reset, { signal: listeners.signal });
+    window.addEventListener("popstate", reset, { signal: listeners.signal });
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        reset();
+        listeners.abort();
+      },
+      { signal: listeners.signal },
+    );
+  }
+</script>

@@ -1,3 +1,3 @@
-export const SITE_TITLE = "Nick Kebbas — Curiosity, compiled.";
+export const SITE_TITLE = "Nick Kebbas — A personal observatory.";
 export const SITE_DESCRIPTION =
-  "The personal space of Nick Kebbas. Explore projects, experiments, and ideas across software, AI, and Bitcoin.";
+  "Projects, experiments, and other obsessions. Explore Nick Kebbas’s personal observatory of software, AI, Bitcoin, and things taking shape.";
