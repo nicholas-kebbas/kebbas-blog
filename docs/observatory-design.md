@@ -98,3 +98,7 @@ The checks below are release criteria, not completed-test claims. Keep actual re
 - Code-side lifecycle simulation verified suspension for pause, hidden/offscreen state, reduced motion, and context loss. These are not a measured phone-GPU benchmark or an OS-level assistive-technology audit.
 - Static source/build check verified one h1, every internal anchor, local asset existence, and continued removal of the former blog.
 - Final production receipt and screenshots are retained in the task’s local release ledger after deployment.
+
+## Copy simplification — October 26, 2026
+
+Owner feedback: the copy sounded artificial. Removed the personal-observatory labels, slogans, biography paragraphs, and decorative narration. The homepage now leads with Nick’s name and “Let’s work together,” followed by the project, artwork, interactive controls, and a direct X contact link. The visuals and navigation effects remain. Metadata and the share image use the same plain language.

@@ -1553,3 +1553,53 @@ html[data-motion="full"] .interlude-track {
     padding-top: 23px;
   }
 }
+
+/* The artwork carries the page; copy stays short and practical. */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 42px;
+  padding: 10px 0;
+  border-bottom: 1px solid #efeee766;
+  font-size: clamp(20px, 2vw, 28px);
+  pointer-events: auto;
+}
+.hero-cta span {
+  color: var(--lime);
+}
+.hero-cta:hover {
+  color: var(--lime);
+  border-color: var(--lime);
+}
+.work .section-intro,
+.lab .lab-heading {
+  margin-top: 0;
+}
+.source-link > h3 {
+  margin: 0;
+}
+.about .specimen-scene::after {
+  background:
+    linear-gradient(0deg, #030403, transparent 12%),
+    linear-gradient(180deg, #030403, transparent 12%);
+}
+.connect-bottom {
+  justify-content: flex-end;
+}
+@media (max-width: 650px) {
+  .hero-cta {
+    margin-top: 26px;
+    gap: 16px;
+    font-size: 20px;
+  }
+  .source-link > h3 {
+    font-size: 24px;
+  }
+  .source-link .source-label {
+    margin-left: auto;
+  }
+  .source-symbol {
+    min-width: 55px;
+  }
+}

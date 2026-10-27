@@ -100,9 +100,9 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
   <canvas class="observatory-canvas" aria-hidden="true"></canvas>
   <div class="observatory-controls" hidden>
     <div class="observatory-control-top">
-      <span class="observatory-control-label">Alter the specimen</span>
+      <span class="observatory-control-label">Shape</span>
       <span class="observatory-coordinate" aria-hidden="true">
-        LIVE / 001
+        001
       </span>
     </div>
     <div class="observatory-modes" role="group" aria-label="Sculpture form">
@@ -631,7 +631,10 @@ const arcs = Array.from({ length: 13 }, (_, index) => index);
       }
       slider.addEventListener("input", syncEntropy);
       // Browsers may restore native form values after a Back navigation.
-      window.addEventListener("pageshow", () => { syncEntropy(); synchronize(); });
+      window.addEventListener("pageshow", () => {
+        syncEntropy();
+        synchronize();
+      });
       syncEntropy();
       surface.addEventListener("webglcontextlost", (event) => {
         event.preventDefault();

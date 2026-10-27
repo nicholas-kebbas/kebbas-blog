@@ -39,8 +39,8 @@ const rays = Array.from(
     <div class="portal-orbit portal-orbit-a"></div>
     <div class="portal-orbit portal-orbit-b"></div>
     <div class="portal-registration portal-registration-top">
-      <span>NK / INTERDIMENSIONAL TRANSIT</span>
-      <span data-portal-index>01—05</span>
+      <span>NK</span>
+      
     </div>
     <div class="portal-heading">
       <span class="portal-heading-echo" data-portal-echo>
@@ -49,8 +49,8 @@ const rays = Array.from(
       <span data-portal-title>Selected work</span>
     </div>
     <div class="portal-registration portal-registration-bottom">
-      <span>LEAVING THIS FRAME</span>
-      <span>ENTERING ANOTHER ↗</span>
+      <span></span>
+      <span>↗</span>
     </div>
   </div>
   <div class="portal-blade portal-blade-a" data-portal-blade-a></div>
@@ -447,7 +447,7 @@ const rays = Array.from(
         if (pending) return;
         begin(
           destination,
-          (target.dataset.portal || target.textContent || "Another dimension")
+          (target.dataset.portal || target.textContent || "Contact")
             .trim()
             .slice(0, 64),
         );
