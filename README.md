@@ -1,6 +1,6 @@
 # Nick Kebbas — kebbas.com
 
-An experimental personal site built with static Astro. A personal observatory: a live WebGL sculpture, original surreal artwork, full-screen chapter transitions, and an interactive particle field. No account, analytics, database, paid API, or runtime server is required.
+An experimental personal site built with static Astro. A single-screen personal site with a live WebGL sculpture, animated link transitions, direct project links, and a work-together invitation. No account, analytics, database, paid API, or runtime server is required.
 
 ## Develop
 
@@ -12,7 +12,7 @@ npm run build
 npm run preview
 ```
 
-Use Node 24 (matching the existing Vercel project). All site content lives in `src/pages/index.astro`. Global styles are in `src/styles/global.css`; the WebGL sculpture is in `src/components/ObservatoryCanvas.astro`, navigation in `src/components/DimensionTransitions.astro`, and shared motion / field controls in `src/scripts/observatory.ts`.
+Use Node 24 (matching the existing Vercel project). All site content lives in `src/pages/index.astro`. Global styles are in `src/styles/global.css`; the WebGL sculpture is in `src/components/ObservatoryCanvas.astro`, navigation in `src/components/DimensionTransitions.astro`, and shared motion / cursor controls in `src/scripts/observatory.ts`.
 
 See [design notes](docs/observatory-design.md) for the interaction map and inspiration, and [artwork provenance](docs/art-direction-v2-assets.md) for original image prompts.
 
@@ -20,7 +20,8 @@ See [design notes](docs/observatory-design.md) for the interaction map and inspi
 
 - Static HTML content works without JavaScript; the artwork has an inline SVG fallback.
 - Artwork stops offscreen and in background tabs, caps pixel ratio and frame rate, and supports a pause button and the operating system's reduced-motion setting.
-- Keyboard navigation, visible focus, skip link, touch-sized controls, and a persistent global motion toggle.
+- Keyboard navigation, visible focus, skip link, touch-sized controls, and a global motion toggle.
+- The homepage fits the viewport without scrolling. Compact layouts retain the main links and sculpture modes; the optional entropy slider is hidden in short landscape views.
 - Native modified clicks and browser history remain intact. Transitions have a bounded recovery and support Escape.
 - No JavaScript means static artwork and native links. No WebGL means the inline SVG sculpture remains visible.
 - Fonts are self-hosted. Syne is licensed under the included SIL Open Font License.

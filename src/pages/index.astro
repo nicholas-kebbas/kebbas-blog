@@ -3,7 +3,6 @@ import BaseHead from "../components/BaseHead.astro";
 import ObservatoryCanvas from "../components/ObservatoryCanvas.astro";
 import DimensionTransitions from "../components/DimensionTransitions.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-const rings = Array.from({ length: 12 }, (_, i) => i);
 ---
 
 <!doctype html>
@@ -11,29 +10,24 @@ const rings = Array.from({ length: 12 }, (_, i) => i);
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-  <body>
+  <body class="one-screen">
     <a class="skip-link" href="#main">
       Skip to content
     </a>
     <header class="site-header">
-      <a
-        class="monogram"
-        href="#top"
-        data-portal="Home"
-        aria-label="Nick Kebbas, back to top"
-      >
+      <a class="monogram" href="#top" aria-label="Nick Kebbas">
         n<span>k</span>
-        <i>✳</i>
+        <i aria-hidden="true">✳</i>
       </a>
-      <nav aria-label="Main navigation">
-        <a href="#work" data-portal="Work">
-          Work <sup>01</sup>
+      <nav aria-label="Projects">
+        <a href="https://granularitygames.com" data-portal="Granularity Games">
+          Granularity Games <span aria-hidden="true">↗</span>
         </a>
-        <a href="#lab" data-portal="Play">
-          Play <sup>02</sup>
+        <a href="https://bayareahousingalpha.com" data-portal="Housing Alpha">
+          Housing Alpha <span aria-hidden="true">↗</span>
         </a>
-        <a href="#connect" data-portal="Contact">
-          Contact <span aria-hidden="true">↗</span>
+        <a href="https://github.com/nicholas-kebbas" data-portal="GitHub">
+          GitHub <span aria-hidden="true">↗</span>
         </a>
       </nav>
       <button
@@ -52,7 +46,7 @@ const rings = Array.from({ length: 12 }, (_, i) => i);
         <span data-motion-label>Motion on</span>
       </button>
     </header>
-    <main id="main">
+    <main id="main" tabindex="-1">
       <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="hero-art">
           <ObservatoryCanvas />
@@ -64,203 +58,19 @@ const rings = Array.from({ length: 12 }, (_, i) => i);
             <span>KEBBAS</span>
             <i aria-hidden="true">✳</i>
           </h1>
-          <a class="hero-cta" href="#connect" data-portal="Contact">
+          <a
+            class="hero-cta"
+            href="https://twitter.com/nickkebbas"
+            data-portal="Contact"
+            aria-label="Let’s work together — contact Nick on X"
+          >
             Let’s work together <span aria-hidden="true">↗</span>
           </a>
         </div>
       </section>
-      <div class="interlude" aria-hidden="true">
-        <div class="interlude-track">
-          {Array.from({ length: 24 }, () => (
-            <b>✳</b>
-          ))}
-        </div>
-      </div>
-      <section class="work section-pad" id="work" aria-labelledby="work-title">
-        <div class="section-intro">
-          <h2 id="work-title">
-            Selected <span class="serif">work.</span>
-          </h2>
-        </div>
-        <a
-          class="housing-project"
-          href="https://bayareahousingalpha.com"
-          data-portal="Housing Alpha"
-          aria-label="Explore Bay Area Housing Alpha"
-        >
-          <div class="housing-art" data-tilt>
-            <img
-              src="/images/observatory-strata.webp"
-              width="1586"
-              height="992"
-              alt="An imagined landscape of floating basalt strata, tiny buildings, and luminous green pathways."
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="housing-registration mono">
-              <span>01</span>
-              <span>Conceptual landscape</span>
-            </div>
-            <div class="housing-title" aria-hidden="true">
-              <span>HOUSING</span>
-              <span>
-                ALPHA<i>↗</i>
-              </span>
-            </div>
-            <svg
-              class="target-mark"
-              viewBox="0 0 100 100"
-              fill="none"
-              aria-hidden="true"
-            >
-              <circle cx="50" cy="50" r="33" />
-              <path d="M0 50h35m30 0h35M50 0v35m0 30v35" />
-            </svg>
-          </div>
-          <div class="project-caption">
-            <h3>Bay Area Housing Alpha</h3>
-            <p>Research and tools for Bay Area homebuyers.</p>
-            <span class="project-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </div>
-        </a>
-        <a
-          class="source-link"
-          href="https://github.com/nicholas-kebbas"
-          data-portal="GitHub"
-        >
-          <span class="source-symbol" aria-hidden="true">
-            &#123;✳&#125;
-          </span>
-          <h3>More on GitHub</h3>
-          <span class="source-label" aria-hidden="true">
-            ↗
-          </span>
-        </a>
-      </section>
-      <section class="about" id="about" aria-label="Artwork">
-        <div class="specimen-scene">
-          <img
-            class="specimen-image"
-            src="/images/observatory-specimen.webp"
-            width="1586"
-            height="992"
-            alt="A surreal botanical sculpture made of ivory ceramic ribbons and intricate chrome branches."
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="specimen-cross" aria-hidden="true">
-            +
-          </span>
-        </div>
-      </section>
-      <section class="lab section-pad" id="lab" aria-labelledby="lab-title">
-        <div class="lab-heading">
-          <h2 id="lab-title">
-            <span class="serif">Play.</span>
-          </h2>
-          <p>Move your pointer or choose a pattern.</p>
-        </div>
-        <div class="field-experiment" data-field>
-          <svg class="field-fallback" viewBox="0 0 1200 620" aria-hidden="true">
-            <g fill="none" stroke="currentColor">
-              {rings.map((i) => (
-                <ellipse
-                  cx="600"
-                  cy="310"
-                  rx={150 + i * 26}
-                  ry={60 + i * 15}
-                  transform={`rotate(${i * 13} 600 310)`}
-                  opacity={0.2 + i * 0.04}
-                />
-              ))}
-            </g>
-          </svg>
-          <canvas aria-hidden="true"></canvas>
-          <div class="field-readout mono" aria-hidden="true">
-            <span>
-              Seed / <span data-field-seed>001</span>
-            </span>
-            <span data-field-name>Coherence</span>
-          </div>
-          <div class="field-center" aria-hidden="true">
-            ✳
-          </div>
-          <p class="sr-only" data-field-status role="status" aria-live="polite">
-            Field seed 1.
-          </p>
-          <div class="field-controls" hidden>
-            <div role="group" aria-label="Field pattern">
-              <button
-                type="button"
-                data-field-mode="coherence"
-                aria-pressed="true"
-              >
-                Coherence
-              </button>
-              <button
-                type="button"
-                data-field-mode="turbulence"
-                aria-pressed="false"
-              >
-                Turbulence
-              </button>
-              <button
-                type="button"
-                data-field-mode="orbit"
-                aria-pressed="false"
-              >
-                Orbit
-              </button>
-            </div>
-            <button class="regenerate" type="button" data-field-regenerate>
-              New seed <span aria-hidden="true">↗</span>
-            </button>
-          </div>
-        </div>
-      </section>
-      <section
-        class="connect section-pad"
-        id="connect"
-        aria-labelledby="connect-title"
-      >
-        <div class="contact-orbit" aria-hidden="true">
-          {rings.slice(0, 8).map((i) => (
-            <span style={`--i:${i}`}></span>
-          ))}
-        </div>
-        <h2 id="connect-title">
-          LET’S
-          <br />
-          <span class="serif">work</span>
-          <br />
-          <span class="contact-something">
-            TOGETHER<span class="lime">.</span>
-          </span>
-        </h2>
-        <div class="connect-bottom">
-          <div class="connect-links">
-            <a href="https://twitter.com/nickkebbas" data-portal="Contact">
-              Message me on X <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
-      </section>
     </main>
-    <footer>
-      <a
-        class="footer-logo"
-        href="#top"
-        data-portal="Home"
-        aria-label="Nick Kebbas, back to top"
-      >
-        nk<span>✳</span>
-      </a>
-      <span class="mono">© {new Date().getFullYear()} Nick Kebbas</span>
-      <a class="mono" href="#top" data-portal="Home">
-        Back to top ↑
-      </a>
+    <footer class="screen-footer mono">
+      © {new Date().getFullYear()} Nick Kebbas
     </footer>
     <div class="cursor-orbit" aria-hidden="true"></div>
     <DimensionTransitions />

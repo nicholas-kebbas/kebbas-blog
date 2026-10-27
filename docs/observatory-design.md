@@ -102,3 +102,7 @@ The checks below are release criteria, not completed-test claims. Keep actual re
 ## Copy simplification — October 26, 2026
 
 Owner feedback: the copy sounded artificial. Removed the personal-observatory labels, slogans, biography paragraphs, and decorative narration. The homepage now leads with Nick’s name and “Let’s work together,” followed by the project, artwork, interactive controls, and a direct X contact link. The visuals and navigation effects remain. Metadata and the share image use the same plain language.
+
+## Single-screen revision — October 26, 2026
+
+Owner requested no scrolling and a direct Granularity Games link instead of Play. The homepage is now one viewport with the sculpture, Nick’s name, a direct X contact invitation, and links to Granularity Games, Housing Alpha, and GitHub. Removed the lower project/art/play/contact sections and their unused field/parallax script. Original image files remain in the repository but are not requested by the homepage. Granularity Games’ destination is preserved from the former article and verified over HTTPS.
