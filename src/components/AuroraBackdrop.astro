@@ -1,0 +1,427 @@
+---
+// Four procedural light studies, driven entirely by the page's scroll progress.
+---
+
+<div class="aurora-backdrop" data-aurora-backdrop aria-hidden="true">
+  <div class="aurora-fallback"></div>
+  <canvas class="aurora-canvas"></canvas>
+</div>
+
+<style>
+  .aurora-backdrop {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #050819;
+  }
+  .aurora-canvas,
+  .aurora-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .aurora-fallback {
+    background:
+      radial-gradient(ellipse at 72% 34%, #7546da40, transparent 48%),
+      radial-gradient(ellipse at 37% 60%, #27e5b52b, transparent 48%),
+      radial-gradient(ellipse at 74% 72%, #21aabe30, transparent 40%),
+      linear-gradient(160deg, #040715, #091b27 55%, #07091e);
+  }
+  .aurora-fallback::before {
+    content: "";
+    position: absolute;
+    width: 140%;
+    height: 65%;
+    left: -20%;
+    top: 5%;
+    border-radius: 50%;
+    transform: rotate(-14deg);
+    box-shadow:
+      0 20px 35px -20px #c3ffc8bd,
+      0 55px 90px -40px #36f3be9c,
+      0 100px 120px -55px #1ec4e774;
+  }
+  .aurora-fallback::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .65;
+    background:
+      radial-gradient(circle at 17% 21%, #d1f3ff 0 1px, transparent 1.6px),
+      radial-gradient(circle at 68% 15%, #e7ddff 0 1px, transparent 1.8px),
+      radial-gradient(circle at 83% 32%, #c9e8ff 0 .8px, transparent 1.5px),
+      radial-gradient(circle at 39% 39%, #c1d4ed 0 .7px, transparent 1.4px);
+  }
+  .aurora-canvas {
+    opacity: 0;
+  }
+  .aurora-backdrop[data-ready] .aurora-canvas {
+    opacity: 1;
+  }
+  .aurora-backdrop[data-ready] .aurora-fallback {
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  const vertexSource = `
+    attribute vec2 position;
+    void main() { gl_Position = vec4(position, 0.0, 1.0); }
+  `;
+  const fragmentSource = `
+    precision highp float;
+    uniform vec2 resolution;
+    uniform float progress;
+
+    float hash(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * .1031);
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.x + p3.y) * p3.z);
+    }
+    float noise(vec2 p) {
+      vec2 i = floor(p), f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+        mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0)), f.x), f.y);
+    }
+    vec3 stars(vec2 p) {
+      vec3 light = vec3(0.0);
+      for (int i = 0; i < 2; i++) {
+        float layer = float(i);
+        vec2 field = p * (87.0 + layer * 74.0) + layer * 17.0;
+        vec2 cell = floor(field);
+        float seed = hash(cell + layer);
+        vec2 center = vec2(hash(cell + 3.7), hash(cell + 9.2)) * .7 + .15;
+        float d = length(fract(field) - center);
+        float core = 1.0 - smoothstep(.015, .075 - layer * .025, d);
+        float halo = exp(-d * 23.0) * .22;
+        float present = step(.978 + layer * .012, seed);
+        light += (core + halo) * present * mix(vec3(.35, .55, .8), vec3(.95, .83, 1.0), seed) * (.45 - layer * .16);
+      }
+      return light;
+    }
+    vec3 sky(vec2 p) {
+      float mist = noise(p * 2.7 + vec2(11.0, 4.0));
+      return vec3(.005, .008, .024) + mist * vec3(.008, .009, .023);
+    }
+    vec3 aurora(vec2 p, float flow) {
+      vec3 light = sky(p);
+      light += exp(-dot(p - vec2(.2, .16), p - vec2(.2, .16)) * 3.0) * vec3(.008, .055, .054);
+      // Layered curtain folds: a bright lower hem, vertical fibers and diffuse tops.
+      for (int i = 0; i < 4; i++) {
+        float layer = float(i);
+        float x = p.x + layer * .11;
+        float fold = sin(x * 3.7 + flow * .5 + layer * .71);
+        float hem = -.19 + layer * .065 + .13 * fold + .055 * sin(x * 8.2 - flow + layer);
+        float height = p.y - hem;
+        float stream = x * (155.0 + layer * 23.0) + sin(x * 13.0 + flow) * 5.0 + layer;
+        float widthVariation = 1.4 + noise(vec2(x * 10.0 + flow * .1, layer * 7.0)) * 4.0;
+        float fibers = .06 + .94 * pow(.5 + .5 * sin(stream + sin(stream * .371) * 1.7), widthVariation);
+        fibers *= .25 + 1.45 * noise(vec2(x * 39.0 + flow * .13, layer * 9.0));
+        float curtains = smoothstep(-.014, .022, height) * exp(-max(height, 0.0) * (5.5 + layer));
+        curtains *= 1.0 - smoothstep(.22, .64, height);
+        float folds = .32 + .68 * pow(.5 + .5 * sin(x * 6.7 + flow + layer * 1.8), 2.0);
+        float rim = exp(-abs(height) * 130.0) * (.3 + .7 * fibers);
+        float bloom = exp(-abs(height) * 15.0);
+        vec3 pigment = mix(vec3(.13, 1.0, .48), vec3(.025, .48, 1.0), smoothstep(.02, .32, height));
+        pigment = mix(pigment, vec3(.38, .16, .85), smoothstep(.23, .5, height));
+        light += pigment * (curtains * fibers * folds * 1.15 + bloom * .065) / (1.0 + layer * .35);
+        light += rim * folds * vec3(.47, 1.0, .76) * .66;
+        float upperFringe = height - (.22 + .06 * sin(x * 5.0 + layer + flow));
+        light += exp(-abs(upperFringe) * 35.0) * fibers * folds * vec3(.3, .055, .65) * .16;
+      }
+      return light;
+    }
+    vec3 tidal(vec2 p, float flow) {
+      vec3 light = sky(p) + vec3(.012, .003, .028);
+      vec2 q = p;
+      q.y += p.x * .16;
+      light += exp(-dot(q * vec2(.7, 1.7), q * vec2(.7, 1.7)) * 3.0) * vec3(.07, .015, .15);
+      // Overlapping translucent bands reveal a sharp edge and a softer inner face.
+      for (int i = 0; i < 7; i++) {
+        float layer = float(i);
+        float path = .17 * sin(q.x * 3.3 + flow * .6 + layer * .21)
+          + .065 * sin(q.x * 7.1 - flow + layer * .55) + (layer - 3.0) * .035;
+        float d = q.y - path;
+        float width = .018 + .018 * (.5 + .5 * sin(q.x * 4.0 + layer + flow));
+        float face = exp(-pow(d / width, 2.0));
+        float edge = exp(-abs(d - width * .72) * 360.0);
+        float halo = exp(-abs(d) * 17.0);
+        float fold = .3 + .7 * pow(.5 + .5 * sin(q.x * 5.7 + layer * .9 + flow), 2.0);
+        float threads = .75 + .25 * sin(d * 950.0 + q.x * 23.0 + layer);
+        vec3 pigment = mix(vec3(.33, .055, 1.0), vec3(.045, .82, 1.0), .5 + .5 * sin(q.x * 2.4 + layer * .6 - flow));
+        light += pigment * (face * fold * threads * .48 + halo * .04);
+        light += mix(pigment, vec3(.65, .85, 1.0), .4) * edge * fold * .78;
+        light += exp(-abs(d + width * .35) * 650.0) * fold * vec3(.2, .6, 1.0) * .12;
+      }
+      return light;
+    }
+    vec3 corona(vec2 p, float flow) {
+      vec3 light = sky(p);
+      vec2 q = p - vec2(.12, -.035);
+      q.x *= .82;
+      q.y += sin(q.x * 3.8 + flow * .4) * .055;
+      float radius = length(q);
+      float angle = atan(q.y, q.x);
+      light += exp(-radius * radius * 6.0) * vec3(.16, .008, .046);
+      // Broken, curling plasma arcs; hotter filaments sit inside broad colored light.
+      for (int i = 0; i < 7; i++) {
+        float layer = float(i);
+        float arc = .19 + layer * .038 + .024 * sin(angle * 3.0 + flow + layer * .7)
+          + .012 * sin(angle * 7.0 - flow * .5 + layer);
+        float d = radius - arc;
+        float filaments = .35 + .65 * pow(.5 + .5 * sin(angle * 85.0 + layer * 4.0 + flow), 2.0);
+        float sweep = pow(.5 + .5 * sin(angle + flow * .35 + layer * .6), 2.0);
+        float core = exp(-abs(d) * 290.0);
+        float veil = exp(-abs(d) * 42.0);
+        float halo = exp(-abs(d) * 12.0);
+        vec3 pigment = mix(vec3(1.0, .045, .3), vec3(1.0, .37, .055), .5 + .5 * sin(angle * 1.5 + layer * .55));
+        pigment = mix(pigment, vec3(.48, .08, .88), layer / 10.0);
+        light += pigment * (core * 1.12 + veil * filaments * .3 + halo * .045) * (.15 + sweep);
+        light += vec3(1.0, .69, .35) * core * sweep * filaments * .55;
+      }
+      light *= 1.0 - exp(-radius * radius * 110.0) * .67;
+      return light;
+    }
+    vec2 glacialCenter() {
+      float aspect = resolution.x / resolution.y;
+      float viewWidth = mix(1.1, aspect, smoothstep(.65, 1.25, aspect));
+      return vec2(viewWidth * .22, .035);
+    }
+    float glacialDisk(vec2 p) {
+      return 1.0 - smoothstep(.178, .182, length(p - glacialCenter()));
+    }
+    vec3 afterglow(vec2 p, float flow) {
+      vec3 light = sky(p);
+      float horizon = -.225 + .035 * p.x * p.x;
+      float height = p.y - horizon;
+      float glow = exp(-abs(height) * 22.0);
+      light += glow * vec3(.035, .23, .25);
+      light += exp(-abs(height) * 6.0) * vec3(.025, .035, .09);
+      float drift = .14 + .06 * sin(p.x * 3.6 + flow * .4) + .035 * sin(p.x * 7.0 - flow);
+      float veil = exp(-abs(p.y - drift) * 14.0) * (.35 + .65 * noise(vec2(p.x * 7.0 + flow * .2, 3.0)));
+      light += veil * mix(vec3(.02, .13, .17), vec3(.17, .035, .23), .5 + .5 * sin(p.x * 3.0 + flow));
+      float lower = 1.0 - smoothstep(-.004, .006, height);
+      float ripple = .5 + .5 * sin(2.0 / (abs(height) + .045) + p.x * 13.0 + flow);
+      float reflection = pow(ripple, 8.0) * exp(-abs(height) * 13.0);
+      light = mix(light, light * .36 + reflection * vec3(.045, .17, .22), lower * .85);
+      light += exp(-abs(height) * 420.0) * vec3(.12, .42, .45) * (.4 + .6 * noise(vec2(p.x * 6.0, 8.0)));
+      // A glacial crescent hangs above the horizon; its shaded face stays deep blue.
+      vec2 orb = p - glacialCenter();
+      float radius = length(orb);
+      float disk = glacialDisk(p);
+      float shadow = 1.0 - smoothstep(.181, .192, length(orb - vec2(.067, -.018)));
+      float crescent = disk * (1.0 - shadow);
+      float ice = .55 + .45 * noise(orb * vec2(25.0, 8.0) + vec2(flow * .08, 2.0));
+      vec3 face = vec3(.008, .017, .045) + noise(orb * 12.0) * vec3(.009, .018, .04);
+      light = mix(light, face, disk * .96);
+      light += crescent * ice * vec3(.28, .83, .94) * .95;
+      float rimDirection = .16 + 1.25 * pow(max(dot(orb / max(radius, .0001), normalize(vec2(-.75, .45))), 0.0), 2.0);
+      light += exp(-abs(radius - .18) * 270.0) * rimDirection * vec3(.33, .86, 1.0) * .85;
+      light += exp(-abs(radius - .18) * 30.0) * rimDirection * vec3(.035, .13, .29) * .65;
+      light += exp(-dot(orb, orb) * 9.0) * vec3(.018, .008, .045);
+      float reflectionWidth = .045 + abs(height) * .55;
+      float moonReflection = exp(-pow((p.x - glacialCenter().x) / reflectionWidth, 2.0)) * exp(-abs(height) * 8.0) * lower;
+      light += moonReflection * pow(ripple, 5.0) * vec3(.075, .31, .36);
+      return light;
+    }
+    void main() {
+      vec2 st = gl_FragCoord.xy / resolution;
+      float aspect = resolution.x / resolution.y;
+      vec2 p = (st - .5) * vec2(mix(1.1, aspect, smoothstep(.65, 1.25, aspect)), 1.0);
+      float flow = progress * 4.0;
+      float chapter = clamp(progress * 4.0 - 1.0, 0.0, 3.0);
+      float blend = smoothstep(.1, .9, fract(chapter));
+      vec3 color;
+      // Evaluate only the neighboring studies, with exact shared endpoints.
+      if (chapter < 1.0) color = mix(aurora(p, flow), tidal(p, flow), blend);
+      else if (chapter < 2.0) color = mix(tidal(p, flow), corona(p, flow), blend);
+      else if (chapter < 3.0) color = mix(corona(p, flow), afterglow(p, flow), blend);
+      else color = afterglow(p, flow);
+      vec2 starSpace = (st - .5) * vec2(aspect, 1.0);
+      float skyMask = mix(1.0, smoothstep(-.23, -.12, p.y), smoothstep(2.1, 3.0, chapter));
+      skyMask *= 1.0 - smoothstep(2.1, 2.9, chapter) * glacialDisk(p);
+      color += stars(starSpace) * skyMask;
+      float vignette = 1.0 - smoothstep(.28, .86, length((st - .5) * vec2(1.0, .85)));
+      color *= .65 + .35 * vignette;
+      color = pow(1.0 - exp(-color * 1.35), vec3(.94));
+      // Stable spatial grain: no clock, flicker, or random changes between frames.
+      color += (hash(floor(st * vec2(aspect, 1.0) * 1100.0)) - .5) / 330.0;
+      gl_FragColor = vec4(max(color, vec3(0.0)), 1.0);
+    }
+  `;
+
+  document.querySelectorAll<HTMLElement>("[data-aurora-backdrop]").forEach((element) => {
+    const canvas = element.querySelector<HTMLCanvasElement>("canvas");
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl", {
+      alpha: false, antialias: false, depth: false, stencil: false,
+      preserveDrawingBuffer: false, powerPreference: "low-power",
+    });
+    if (!gl) return;
+    const context = gl;
+    const surface = canvas;
+    const listeners = new AbortController();
+    let program: WebGLProgram | null = null;
+    let geometry: WebGLBuffer | null = null;
+    let resolution: WebGLUniformLocation | null = null;
+    let progressUniform: WebGLUniformLocation | null = null;
+    let raf = 0;
+    let settleTimer = 0;
+    let active = false;
+    let lost = false;
+    let disposed = false;
+    let pageActive = true;
+    const clamp = (value: number) => Math.max(0, Math.min(1, value));
+    const initial = Number(document.documentElement.dataset.scrollProgress || 0);
+    let progress = Number.isFinite(initial) ? clamp(initial) : 0;
+
+    function compile(type: number, source: string) {
+      const shader = context.createShader(type);
+      if (!shader) return null;
+      context.shaderSource(shader, source);
+      context.compileShader(shader);
+      if (!context.getShaderParameter(shader, context.COMPILE_STATUS)) {
+        context.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+    function setup() {
+      const vertex = compile(context.VERTEX_SHADER, vertexSource);
+      const fragment = compile(context.FRAGMENT_SHADER, fragmentSource);
+      if (!vertex || !fragment) {
+        if (vertex) context.deleteShader(vertex);
+        if (fragment) context.deleteShader(fragment);
+        return false;
+      }
+      program = context.createProgram();
+      if (!program) {
+        context.deleteShader(vertex);
+        context.deleteShader(fragment);
+        return false;
+      }
+      context.attachShader(program, vertex);
+      context.attachShader(program, fragment);
+      context.linkProgram(program);
+      context.deleteShader(vertex);
+      context.deleteShader(fragment);
+      if (!context.getProgramParameter(program, context.LINK_STATUS)) {
+        context.deleteProgram(program);
+        program = null;
+        return false;
+      }
+      geometry = context.createBuffer();
+      if (!geometry) {
+        context.deleteProgram(program);
+        program = null;
+        return false;
+      }
+      context.useProgram(program);
+      context.bindBuffer(context.ARRAY_BUFFER, geometry);
+      context.bufferData(context.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), context.STATIC_DRAW);
+      const position = context.getAttribLocation(program, "position");
+      context.enableVertexAttribArray(position);
+      context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
+      resolution = context.getUniformLocation(program, "resolution");
+      progressUniform = context.getUniformLocation(program, "progress");
+      return true;
+    }
+    function canRender() {
+      return !lost && !disposed && pageActive && !document.hidden && !!program;
+    }
+    function draw() {
+      raf = 0;
+      if (!canRender()) return;
+      const bounds = element.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+      const budget = active ? 1_300_000 : 2_000_000;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(budget / (bounds.width * bounds.height)));
+      const width = Math.max(1, Math.floor(bounds.width * ratio));
+      const height = Math.max(1, Math.floor(bounds.height * ratio));
+      if (surface.width !== width || surface.height !== height) {
+        surface.width = width;
+        surface.height = height;
+      }
+      context.viewport(0, 0, width, height);
+      context.uniform2f(resolution, width, height);
+      context.uniform1f(progressUniform, progress);
+      context.drawArrays(context.TRIANGLES, 0, 6);
+      element.dataset.ready = "";
+      element.dataset.scene = String(Math.min(4, Math.max(1, Math.round(progress * 4))));
+    }
+    function requestRender() {
+      if (canRender() && !raf) raf = requestAnimationFrame(draw);
+    }
+    function stop() {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      window.clearTimeout(settleTimer);
+      settleTimer = 0;
+      active = false;
+    }
+    function scroll(event: Event) {
+      const value = (event as CustomEvent<{ progress?: number }>).detail?.progress;
+      if (typeof value !== "number" || !Number.isFinite(value)) return;
+      const next = clamp(value);
+      if (next === progress) return;
+      progress = next;
+      active = canRender();
+      requestRender();
+      window.clearTimeout(settleTimer);
+      // A single settling render sharpens the same pose; it never advances motion.
+      if (canRender()) settleTimer = window.setTimeout(() => {
+        settleTimer = 0;
+        active = false;
+        requestRender();
+      }, 160);
+    }
+    function visibility() {
+      if (document.hidden) stop();
+      else requestRender();
+    }
+    const resizeObserver = new ResizeObserver(requestRender);
+    surface.addEventListener("webglcontextlost", (event) => {
+      event.preventDefault();
+      lost = true;
+      program = null;
+      geometry = null;
+      stop();
+      element.removeAttribute("data-ready");
+    }, { signal: listeners.signal });
+    surface.addEventListener("webglcontextrestored", () => {
+      lost = false;
+      if (setup()) requestRender();
+    }, { signal: listeners.signal });
+    if (!setup()) {
+      listeners.abort();
+      return;
+    }
+    resizeObserver.observe(element);
+    window.addEventListener("observatory:scroll", scroll, { signal: listeners.signal });
+    window.addEventListener("resize", requestRender, { signal: listeners.signal });
+    document.addEventListener("visibilitychange", visibility, { signal: listeners.signal });
+    window.addEventListener("pagehide", () => {
+      pageActive = false;
+      stop();
+    }, { signal: listeners.signal });
+    window.addEventListener("pageshow", () => {
+      pageActive = true;
+      const value = Number(document.documentElement.dataset.scrollProgress);
+      if (Number.isFinite(value)) progress = clamp(value);
+      requestRender();
+    }, { signal: listeners.signal });
+    document.addEventListener("astro:before-swap", () => {
+      disposed = true;
+      stop();
+      resizeObserver.disconnect();
+      listeners.abort();
+      if (program) context.deleteProgram(program);
+      if (geometry) context.deleteBuffer(geometry);
+    }, { once: true, signal: listeners.signal });
+    requestRender();
+  });
+</script>

@@ -116,3 +116,11 @@ Owner requested stronger color, sharper imagery, and no user toggles. Removed th
 The sculpture now starts in a fixed pose and rotates only when dragged with a mouse or touch. Release keeps that orientation without inertia; hovering does not move it. A grab cursor indicates interaction. Keyboard users can focus the sculpture, rotate with the arrow keys, and reset with Home. Rendering is requested by input, resize, or lifecycle recovery, with a sharper frame after release; it does not run continuously while idle. Reduced-motion preferences still bypass animated link transitions, and the sculpture always uses direct manual control.
 
 The work-together link now uses `mailto:nickkebbas@gmail.com`, opening the visitor’s configured email app. It uses ordinary link behavior without the page-navigation transition. The project links keep their existing destinations and transitions.
+
+## Scrollable light studies — November 24, 2026
+
+Owner requested a sequence of northern-lights-like visuals while keeping the name and contact visible, allowing the name to shrink on scroll. The page now has a five-viewport native scroll runway with a fixed composition. The opening manually rotated chrome sculpture gives way to four procedural backgrounds: green aurora curtains, violet/cyan light ribbons, warm plasma arcs, and a glacial afterglow. There are no downloaded visual assets or added dependencies.
+
+Scroll position controls the scene blend and light shapes; stopping scroll freezes the view. The heading gently reduces in size during the first transition, preserving the full final S and the email invitation. A compact scene index uses ordinary in-page links. Header projects and contact remain reachable throughout. Vertical touch swipes scroll; horizontal sculpture drags retain manual rotation.
+
+Reduced motion uses discrete still scenes and retains the full-size heading. Hidden sculpture controls are removed from pointer/keyboard access, and the renderer suspends. WebGL failure leaves the CSS light-field fallback; JavaScript failure leaves the original single scene and real links. Rendering coalesces input into requested frames, uses bounded pixel counts, and stops when idle or hidden. Browser validation and release receipts remain in the local task ledger.

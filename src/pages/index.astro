@@ -1,6 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import ObservatoryCanvas from "../components/ObservatoryCanvas.astro";
+import AuroraBackdrop from "../components/AuroraBackdrop.astro";
 import DimensionTransitions from "../components/DimensionTransitions.astro";
 import {
   GITHUB_PROFILE,
@@ -22,6 +23,13 @@ const profile = {
     sameAs: [GITHUB_PROFILE],
   },
 };
+const scenes = [
+  { id: "top", name: "Chrome" },
+  { id: "aurora", name: "Aurora" },
+  { id: "tidal", name: "Tidal" },
+  { id: "corona", name: "Corona" },
+  { id: "afterglow", name: "Afterglow" },
+];
 ---
 
 <!doctype html>
@@ -33,7 +41,7 @@ const profile = {
       set:html={JSON.stringify(profile).replace(/</g, "\\u003c")}
     />
   </head>
-  <body class="one-screen">
+  <body class="scroll-experience">
     <a class="skip-link" href="#main">
       Skip to content
     </a>
@@ -54,9 +62,15 @@ const profile = {
       </nav>
     </header>
     <main id="main" tabindex="-1">
-      <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="scroll-landmarks" aria-hidden="true">
+        {scenes.map((scene, index) => <span id={scene.id} style={`--stop: ${index}`} />)}
+      </div>
+      <section class="hero" aria-labelledby="hero-title">
         <div class="hero-art">
-          <ObservatoryCanvas />
+          <AuroraBackdrop />
+          <div class="sculpture-stage" data-sculpture-stage>
+            <ObservatoryCanvas />
+          </div>
         </div>
         <div class="hero-type">
           <h1 id="hero-title">
@@ -74,8 +88,22 @@ const profile = {
         </div>
       </section>
     </main>
-    <footer class="screen-footer mono">
-      © {new Date().getFullYear()} Nick Kebbas
+    <footer class="screen-footer">
+      <span class="copyright mono">© {new Date().getFullYear()} Nick Kebbas</span>
+      <div class="scene-status mono" aria-hidden="true">
+        <span data-scene-number>01</span><span class="scene-divider"></span>
+        <span data-scene-name>Chrome</span>
+      </div>
+      <div class="scene-controls">
+        <span class="scroll-cue mono" data-scroll-cue>Scroll to explore <span aria-hidden="true">↓</span></span>
+        <nav class="scene-nav" aria-label="Visual scenes">
+          {scenes.map((scene, index) => (
+            <a href={`#${scene.id}`} data-scene-stop={index} data-scene-name={scene.name} aria-label={`${index + 1} of 5: ${scene.name}`} aria-current={index === 0 ? "location" : undefined}>
+              <span aria-hidden="true"></span>
+            </a>
+          ))}
+        </nav>
+      </div>
     </footer>
     <DimensionTransitions />
     <script>

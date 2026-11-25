@@ -114,7 +114,7 @@
     opacity: 1;
     pointer-events: auto;
     cursor: grab;
-    touch-action: pinch-zoom;
+    touch-action: pan-y pinch-zoom;
     user-select: none;
     -webkit-user-select: none;
   }
@@ -289,6 +289,7 @@
     let lost = false;
     let disposed = false;
     let pageActive = true;
+    let sceneActive = Number(document.documentElement.dataset.scrollProgress || 0) < .18;
     let rotationX = 0, rotationY = 0;
     let drag: { pointerId: number; x: number; y: number } | null = null;
 
@@ -349,11 +350,11 @@
       return true;
     }
     function canRender() {
-      return !disposed && !lost && !!program && pageActive && visible && !document.hidden;
+      return !disposed && !lost && !!program && pageActive && visible && sceneActive && !document.hidden;
     }
     function markIdle() {
       element.dataset.suspended = "true";
-      element.dataset.suspensionReason = disposed ? "disposed" : lost ? "context-lost" : !pageActive || document.hidden ? "hidden" : !visible ? "offscreen" : "idle";
+      element.dataset.suspensionReason = disposed ? "disposed" : lost ? "context-lost" : !pageActive || document.hidden ? "hidden" : !visible || !sceneActive ? "offscreen" : "idle";
     }
     function stop() {
       cancelAnimationFrame(raf);
@@ -448,7 +449,8 @@
       const bounds = element.getBoundingClientRect();
       const sensitivity = Math.PI / Math.max(240, Math.min(bounds.width, bounds.height));
       rotationX = wrap(rotationX + dx * sensitivity);
-      rotationY = wrap(rotationY + dy * sensitivity);
+      // Vertical touch gestures belong to native page scrolling.
+      if (event.pointerType !== "touch") rotationY = wrap(rotationY + dy * sensitivity);
       requestRender();
     }
     function pointerEnd(event: PointerEvent) {
@@ -474,9 +476,9 @@
     }
     function setReady(ready: boolean) {
       element.toggleAttribute("data-ready", ready);
-      surface.tabIndex = ready ? 0 : -1;
-      surface.setAttribute("aria-hidden", String(!ready));
-      if (!ready && document.activeElement === surface) surface.blur();
+      surface.tabIndex = ready && sceneActive ? 0 : -1;
+      surface.setAttribute("aria-hidden", String(!ready || !sceneActive));
+      if ((!ready || !sceneActive) && document.activeElement === surface) surface.blur();
     }
     function pagehide() {
       pageActive = false;
@@ -526,6 +528,13 @@
     window.addEventListener("blur", finishDrag, { signal: listeners.signal });
     window.addEventListener("pagehide", pagehide, { signal: listeners.signal });
     window.addEventListener("pageshow", pageshow, { signal: listeners.signal });
+    window.addEventListener("observatory:scroll", (event) => {
+      const nextActive = (event as CustomEvent<{ progress: number }>).detail.progress < .18;
+      if (nextActive === sceneActive) return;
+      sceneActive = nextActive;
+      setReady(!!program && !lost);
+      synchronize();
+    }, { signal: listeners.signal });
     // Reduced motion needs no special animation path: all rotation is direct input.
     synchronize();
     function dispose() {
