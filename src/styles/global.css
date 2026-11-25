@@ -200,6 +200,9 @@ main:focus {
 .hero h1 > span {
   font-size: 0.94em;
   display: inline-block;
+  /* Leave room for the final glyph beyond the negative letter spacing. */
+  padding-inline-end: 0.12em;
+  margin-inline-end: -0.12em;
   color: #ff969b;
   background: linear-gradient(110deg, #ffdc6b 4%, #ff875f 29%, #ff65ba 57%, #a79cff 81%, #70f3ff);
   background-clip: text;
