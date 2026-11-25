@@ -254,6 +254,30 @@ html[data-scroll-ready] .scroll-landmarks { display: block; }
   color: var(--lime);
   border-color: var(--lime);
 }
+.gallery-note { margin-top: 5px; }
+.gallery-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: #e0e3ef;
+  font-size: 13px;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  pointer-events: auto;
+}
+.gallery-note a:hover { color: var(--lime); }
+@media (orientation: landscape) and (max-height: 520px) {
+  .hero-actions {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    width: max-content;
+    max-width: calc(100vw - var(--gutter) * 2);
+  }
+  .gallery-note { margin-top: 0; }
+}
 .screen-footer {
   position: fixed;
   z-index: 10;

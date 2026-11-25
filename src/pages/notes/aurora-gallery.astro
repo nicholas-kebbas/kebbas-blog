@@ -1,0 +1,34 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+
+const title = "How the Scroll-Driven Aurora Gallery Works | Nick Kebbas";
+const description = "A technical note on the WebGL and CSS light studies on Nick Kebbas’s site, with native scrolling, reduced-motion stills, and visual fallbacks.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      .notes { max-width: 44rem; margin: auto; padding: clamp(1.25rem, 5vw, 4rem); line-height: 1.65; }
+      .notes h1 { font-size: clamp(2rem, 7vw, 3.5rem); line-height: 1.1; }
+      .notes h2 { margin-top: 2rem; font-size: 1.4rem; }
+      .notes a { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <main class="notes">
+      <a href="/">← Back to the gallery</a>
+      <article>
+        <h1>How the scroll-driven aurora gallery works</h1>
+        <p><a href="/">The gallery</a> starts with a chrome sculpture you can turn by dragging. Scroll down and it gives way to four light studies: green aurora curtains, violet and cyan ribbons, warm plasma arcs, and a colder afterglow. The scene changes, but the name, project links, and contact stay within reach.</p>
+        <h2>Let the browser handle scrolling</h2>
+        <p>The page uses a five-screen scroll area and keeps the composition fixed. Instead of intercepting scrolling, it uses scroll position to blend between scenes. When you stop scrolling, the image holds rather than running on its own. The scene index uses ordinary links, so Aurora and the other stops are still addressable as page anchors.</p>
+        <h2>Give the sculpture its own gesture</h2>
+        <p>On touch screens, a vertical swipe continues through the gallery and a horizontal drag turns the opening sculpture. The sculpture also supports arrow-key rotation and Home to reset while focused. It responds to input, not a continuously running idle animation.</p>
+        <h2>Treat the still version as part of the design</h2>
+        <p>With reduced motion, the scenes change in discrete steps rather than blending. If WebGL is unavailable, CSS takes over the backdrop; without JavaScript the opening artwork and real links remain. That separation is what lets the visual experiment change without putting access to the work behind it.</p>
+        <p><a href="/#aurora">See the Aurora scene</a> or <a href="/#afterglow">skip to Afterglow</a>.</p>
+      </article>
+    </main>
+  </body>
+</html>
