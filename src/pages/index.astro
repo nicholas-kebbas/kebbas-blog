@@ -2,13 +2,36 @@
 import BaseHead from "../components/BaseHead.astro";
 import ObservatoryCanvas from "../components/ObservatoryCanvas.astro";
 import DimensionTransitions from "../components/DimensionTransitions.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import {
+  PROFILE_LINKS,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+} from "../consts";
+
+const homepage = new URL("/", Astro.site).href;
+const profile = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  url: homepage,
+  mainEntity: {
+    "@type": "Person",
+    "@id": new URL("#nick-kebbas", homepage).href,
+    name: SITE_NAME,
+    url: homepage,
+    sameAs: Object.values(PROFILE_LINKS),
+  },
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(profile).replace(/</g, "\\u003c")}
+    />
   </head>
   <body class="one-screen">
     <a class="skip-link" href="#main">
@@ -25,7 +48,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
         <a href="https://bayareahousingalpha.com" data-portal="Housing Alpha">
           Housing Alpha <span aria-hidden="true">↗</span>
         </a>
-        <a href="https://github.com/nicholas-kebbas" data-portal="GitHub">
+        <a href={PROFILE_LINKS.github} data-portal="GitHub">
           GitHub <span aria-hidden="true">↗</span>
         </a>
       </nav>
@@ -43,7 +66,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
           </h1>
           <a
             class="hero-cta"
-            href="https://twitter.com/nickkebbas"
+            href={PROFILE_LINKS.x}
             data-portal="Contact"
             aria-label="Let’s work together — contact Nick on X"
           >
