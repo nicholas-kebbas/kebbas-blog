@@ -234,42 +234,12 @@ main:focus {
   font-size: 8px;
   pointer-events: none;
 }
-.cursor-orbit {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 42px;
-  height: 42px;
-  margin-left: -21px;
-  margin-top: -21px;
-  border: 1px solid #e5edce55;
-  border-radius: 50%;
-  z-index: 9000;
-  pointer-events: none;
-  opacity: 0;
-  transition:
-    width 0.2s,
-    height 0.2s,
-    margin 0.2s,
-    border-color 0.2s;
-  mix-blend-mode: difference;
-}
-.cursor-orbit[data-active] {
-  width: 72px;
-  height: 72px;
-  margin-left: -36px;
-  margin-top: -36px;
-  border-color: var(--lime);
-}
 html[data-motion="still"] *,
 html[data-motion="still"] *::before,
 html[data-motion="still"] *::after {
   animation-play-state: paused !important;
   scroll-behavior: auto !important;
   transition-duration: 0s !important;
-}
-html[data-motion="still"] .cursor-orbit {
-  display: none;
 }
 @media (max-width: 1000px) {
   .site-header {
@@ -339,9 +309,6 @@ html[data-motion="still"] .cursor-orbit {
     bottom: 13px;
     font-size: 7px;
   }
-  .cursor-orbit {
-    display: none;
-  }
 }
 @media (max-width: 650px) and (max-height: 720px) {
   .hero-type {
@@ -395,8 +362,5 @@ html[data-motion="still"] .cursor-orbit {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
-  }
-  .cursor-orbit {
-    display: none;
   }
 }

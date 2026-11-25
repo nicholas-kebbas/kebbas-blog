@@ -7,7 +7,8 @@
     class="observatory-fallback"
     viewBox="0 0 1600 900"
     fill="none"
-    aria-hidden="true"
+    role="img"
+    aria-label="Iridescent intertwined metal sculpture"
   >
     <defs>
       <linearGradient
@@ -79,7 +80,13 @@
       <circle cx="775" cy="650" r="10" fill="url(#observatory-edge)" />
     </g>
   </svg>
-  <canvas class="observatory-canvas" aria-hidden="true"></canvas>
+  <canvas
+    class="observatory-canvas"
+    role="img"
+    aria-label="Interactive iridescent sculpture. Drag to rotate. Use arrow keys to rotate, or Home to reset the view."
+    aria-hidden="true"
+    tabindex="-1"
+  ></canvas>
 </div>
 
 <style>
@@ -105,6 +112,21 @@
   }
   .observatory[data-ready] .observatory-canvas {
     opacity: 1;
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: pinch-zoom;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .observatory[data-dragging] .observatory-canvas {
+    cursor: grabbing;
+  }
+  .observatory-canvas:focus-visible {
+    outline: 2px solid var(--lime, #baff50);
+    outline-offset: -10px;
+  }
+  .observatory-canvas[data-pointer-focus]:focus {
+    outline: none;
   }
   .observatory[data-ready] .observatory-fallback {
     visibility: hidden;
@@ -127,8 +149,7 @@
   const fragmentSource = `
     precision highp float;
     uniform vec2 resolution;
-    uniform vec2 pointer;
-    uniform float time;
+    uniform vec2 rotation;
     const float PI = 3.14159265359;
     mat2 rot(float a) { float s = sin(a), c = cos(a); return mat2(c, -s, s, c); }
     float smin(float a, float b, float k) {
@@ -136,8 +157,9 @@
       return mix(b, a, h) - k * h * (1.0 - h);
     }
     vec3 turn(vec3 p) {
-      p.xz = rot(.22 + time * .055 + pointer.x * .12) * p.xz;
-      p.yz = rot(.51 + .13 * sin(time * .13) + pointer.y * .09) * p.yz;
+      // Keep the original opening pose; rotation comes only from user input.
+      p.xz = rot(.66) * p.xz;
+      p.yz = rot(.51 + .13 * sin(1.04)) * p.yz;
       p.xy = rot(-.44) * p.xy;
       return p;
     }
@@ -148,15 +170,18 @@
       return (length(vec2(length(p.xy) - radius, (p.z - ridge) * 1.12)) - thickness) * .75;
     }
     float scene(vec3 p) {
+      // Rotate the sculpture and its small satellites together as a rigid object.
+      p.yz = rot(rotation.y) * p.yz;
+      p.xz = rot(-rotation.x) * p.xz;
       vec3 q = turn(p);
       vec3 b = q;
       b.xy = rot(PI) * b.xy;
       b.yz = rot(1.32) * b.yz;
       b.xz = rot(.34) * b.xz;
       float d = smin(ribbon(q, 0.0, .255), ribbon(b, 1.1, .21), .09);
-      vec3 moon = vec3(1.58 * cos(time * .11 + .6), .61 * sin(time * .11 + .6), .3);
+      vec3 moon = vec3(1.58 * cos(1.48), .61 * sin(1.48), .3);
       d = min(d, length(p - moon) - .105);
-      vec3 moon2 = vec3(-1.43, -.75 + sin(time * .17) * .08, -.4);
+      vec3 moon2 = vec3(-1.43, -.75 + sin(1.36) * .08, -.4);
       return min(d, length(p - moon2) - .052);
     }
     vec3 normal(vec3 p) {
@@ -255,20 +280,17 @@
     });
     if (!gl) return;
     const context = gl;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
+    const listeners = new AbortController();
     let program: WebGLProgram | null = null;
     let geometry: WebGLBuffer | null = null;
     let locations: Record<string, WebGLUniformLocation | null> = {};
     let raf = 0;
-    let previous = 0;
-    let elapsed = 8;
     let visible = true;
     let lost = false;
     let disposed = false;
     let pageActive = true;
-    let pointerX = 0, pointerY = 0, easedX = 0, easedY = 0;
-    let paused = document.documentElement.dataset.motion === "still";
+    let rotationX = 0, rotationY = 0;
+    let drag: { pointerId: number; x: number; y: number } | null = null;
 
     function compile(type: number, source: string) {
       const shader = context.createShader(type);
@@ -322,34 +344,28 @@
       context.enableVertexAttribArray(position);
       context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
       locations = Object.fromEntries(
-        ["resolution", "pointer", "time"].map((name) => [name, context.getUniformLocation(program!, name)]),
+        ["resolution", "rotation"].map((name) => [name, context.getUniformLocation(program!, name)]),
       );
       return true;
     }
-    function canAnimate() {
-      return !disposed && !lost && !!program && pageActive && visible && !document.hidden && !paused && !reduced.matches;
+    function canRender() {
+      return !disposed && !lost && !!program && pageActive && visible && !document.hidden;
     }
-    function draw() {
-      if (!program || lost || disposed || !pageActive || !visible || document.hidden || !surface.width || !surface.height) return;
-      context.viewport(0, 0, surface.width, surface.height);
-      context.uniform2f(locations.resolution, surface.width, surface.height);
-      context.uniform2f(locations.pointer, easedX, easedY);
-      context.uniform1f(locations.time, elapsed);
-      context.drawArrays(context.TRIANGLES, 0, 6);
+    function markIdle() {
+      element.dataset.suspended = "true";
+      element.dataset.suspensionReason = disposed ? "disposed" : lost ? "context-lost" : !pageActive || document.hidden ? "hidden" : !visible ? "offscreen" : "idle";
     }
     function stop() {
       cancelAnimationFrame(raf);
       raf = 0;
-      previous = 0;
+      markIdle();
     }
     function sizeSurface() {
       const bounds = element.getBoundingClientRect();
-      if (!bounds.width || !bounds.height) return;
-      // Higher native resolution, with a hard GPU budget. Once the short intro
-      // finishes, render one sharper frame instead of maintaining an animation.
-      const animating = canAnimate();
-      const pixelBudget = animating ? 2_000_000 : 3_000_000;
-      const desiredRatio = Math.max(window.devicePixelRatio || 1, animating ? 1.25 : 1.5);
+      if (!bounds.width || !bounds.height) return false;
+      // Drag frames have a bounded GPU cost. Release gets one sharper frame.
+      const pixelBudget = drag ? 2_000_000 : 3_000_000;
+      const desiredRatio = Math.max(window.devicePixelRatio || 1, drag ? 1.25 : 1.5);
       const ratio = Math.min(desiredRatio, 2, Math.sqrt(pixelBudget / (bounds.width * bounds.height)));
       const width = Math.max(1, Math.floor(bounds.width * ratio));
       const height = Math.max(1, Math.floor(bounds.height * ratio));
@@ -357,47 +373,110 @@
         surface.width = width;
         surface.height = height;
       }
+      return true;
     }
-    function tick(now: number) {
+    function draw() {
       raf = 0;
-      if (!canAnimate()) return;
-      if (!previous || now - previous >= 1000 / 30) {
-        elapsed += previous ? Math.min((now - previous) / 1000, 0.075) : 0;
-        previous = now;
-        easedX += (pointerX - easedX) * 0.07;
-        easedY += (pointerY - easedY) * 0.07;
-        draw();
+      if (!canRender() || !sizeSurface()) {
+        markIdle();
+        return;
       }
-      raf = requestAnimationFrame(tick);
+      context.viewport(0, 0, surface.width, surface.height);
+      context.uniform2f(locations.resolution, surface.width, surface.height);
+      context.uniform2f(locations.rotation, rotationX, rotationY);
+      context.drawArrays(context.TRIANGLES, 0, 6);
+      markIdle();
+    }
+    function requestRender() {
+      if (!canRender() || raf) return;
+      element.dataset.suspended = "false";
+      delete element.dataset.suspensionReason;
+      // No recurring animation: pointer events and lifecycle changes share a frame.
+      raf = requestAnimationFrame(draw);
+    }
+    function finishDrag() {
+      if (!drag) return;
+      const { pointerId } = drag;
+      drag = null;
+      element.removeAttribute("data-dragging");
+      if (surface.hasPointerCapture(pointerId)) {
+        surface.releasePointerCapture(pointerId);
+      }
+      requestRender();
     }
     function synchronize() {
-      stop();
-      const running = canAnimate();
-      element.dataset.suspended = String(!running);
-      const reason = disposed ? "disposed" : lost ? "context-lost" : !pageActive || document.hidden ? "hidden" : !visible ? "offscreen" : reduced.matches ? "reduced-motion" : paused ? document.documentElement.dataset.motionReason || "paused" : "";
-      if (reason) element.dataset.suspensionReason = reason;
-      else delete element.dataset.suspensionReason;
-      if (!lost && !disposed && pageActive && visible && !document.hidden) {
-        sizeSurface();
-        draw();
+      if (!canRender()) {
+        finishDrag();
+        stop();
+      } else {
+        requestRender();
       }
-      if (running) raf = requestAnimationFrame(tick);
     }
-    function resize() {
-      if (lost || disposed) return;
-      sizeSurface();
-      draw();
+    function wrap(angle: number) {
+      return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
-    function pointer(event: PointerEvent) {
-      if (!finePointer.matches || !canAnimate()) return;
+    function pointerDown(event: PointerEvent) {
+      if (!canRender() || drag || !event.isPrimary || event.button !== 0 || event.ctrlKey || event.metaKey) return;
+      try {
+        surface.setPointerCapture(event.pointerId);
+      } catch {
+        // A pointer cancelled before capture should not leave the control dragging.
+        return;
+      }
+      drag = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+      element.dataset.dragging = "";
+      surface.setAttribute("data-pointer-focus", "");
+      surface.focus({ preventScroll: true });
+      event.preventDefault();
+    }
+    function pointerMove(event: PointerEvent) {
+      if (!drag || event.pointerId !== drag.pointerId || !canRender()) return;
+      // Recover if the button was released outside the window before capture ended.
+      if (event.pointerType === "mouse" && !(event.buttons & 1)) {
+        finishDrag();
+        return;
+      }
+      updateRotation(event);
+    }
+    function updateRotation(event: PointerEvent) {
+      if (!drag) return;
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      drag.x = event.clientX;
+      drag.y = event.clientY;
+      if (!dx && !dy) return;
       const bounds = element.getBoundingClientRect();
-      pointerX = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1));
-      pointerY = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1));
+      const sensitivity = Math.PI / Math.max(240, Math.min(bounds.width, bounds.height));
+      rotationX = wrap(rotationX + dx * sensitivity);
+      rotationY = wrap(rotationY + dy * sensitivity);
+      requestRender();
     }
-    function motion(event: Event) {
-      const detail = (event as CustomEvent<{ paused: boolean }>).detail;
-      paused = typeof detail?.paused === "boolean" ? detail.paused : document.documentElement.dataset.motion === "still";
-      synchronize();
+    function pointerEnd(event: PointerEvent) {
+      if (event.pointerId !== drag?.pointerId) return;
+      if (event.type === "pointerup" && canRender()) updateRotation(event);
+      finishDrag();
+    }
+    function keyboard(event: KeyboardEvent) {
+      surface.removeAttribute("data-pointer-focus");
+      if (!canRender() || event.altKey || event.ctrlKey || event.metaKey) return;
+      const step = event.shiftKey ? .2 : .08;
+      if (event.key === "ArrowLeft") rotationX = wrap(rotationX - step);
+      else if (event.key === "ArrowRight") rotationX = wrap(rotationX + step);
+      else if (event.key === "ArrowUp") rotationY = wrap(rotationY - step);
+      else if (event.key === "ArrowDown") rotationY = wrap(rotationY + step);
+      else if (event.key === "Home") rotationX = rotationY = 0;
+      else if (event.key === "Escape") {
+        finishDrag();
+        return;
+      } else return;
+      event.preventDefault();
+      requestRender();
+    }
+    function setReady(ready: boolean) {
+      element.toggleAttribute("data-ready", ready);
+      surface.tabIndex = ready ? 0 : -1;
+      surface.setAttribute("aria-hidden", String(!ready));
+      if (!ready && document.activeElement === surface) surface.blur();
     }
     function pagehide() {
       pageActive = false;
@@ -405,60 +484,60 @@
     }
     function pageshow() {
       pageActive = true;
-      paused = document.documentElement.dataset.motion === "still";
       synchronize();
     }
-    const resizeObserver = new ResizeObserver(resize);
+    const resizeObserver = new ResizeObserver(requestRender);
     const intersection = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       synchronize();
     }, { threshold: 0 });
-    const motionObserver = new MutationObserver(() => {
-      paused = document.documentElement.dataset.motion === "still";
-      synchronize();
-    });
     surface.addEventListener("webglcontextlost", (event) => {
       event.preventDefault();
       lost = true;
+      program = null;
+      geometry = null;
       synchronize();
-      element.removeAttribute("data-ready");
-    });
+      setReady(false);
+    }, { signal: listeners.signal });
     surface.addEventListener("webglcontextrestored", () => {
       lost = false;
-      if (setup()) {
-        resize();
-        element.dataset.ready = "";
-        synchronize();
-      }
-    });
-    if (!setup()) return;
-    resize();
-    element.dataset.ready = "";
+      setReady(setup());
+      synchronize();
+    }, { signal: listeners.signal });
+    if (!setup()) {
+      listeners.abort();
+      return;
+    }
+    setReady(true);
     resizeObserver.observe(element);
     intersection.observe(element);
-    motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
-    document.addEventListener("pointermove", pointer, { passive: true });
-    document.addEventListener("visibilitychange", synchronize);
-    window.addEventListener("observatory:motion", motion);
-    window.addEventListener("pagehide", pagehide);
-    window.addEventListener("pageshow", pageshow);
-    reduced.addEventListener("change", synchronize);
+    surface.addEventListener("pointerdown", pointerDown, { signal: listeners.signal });
+    surface.addEventListener("pointermove", pointerMove, { signal: listeners.signal });
+    surface.addEventListener("pointerup", pointerEnd, { signal: listeners.signal });
+    surface.addEventListener("pointercancel", pointerEnd, { signal: listeners.signal });
+    surface.addEventListener("lostpointercapture", pointerEnd, { signal: listeners.signal });
+    surface.addEventListener("keydown", keyboard, { signal: listeners.signal });
+    surface.addEventListener("blur", () => {
+      surface.removeAttribute("data-pointer-focus");
+      finishDrag();
+    }, { signal: listeners.signal });
+    document.addEventListener("visibilitychange", synchronize, { signal: listeners.signal });
+    window.addEventListener("resize", requestRender, { signal: listeners.signal });
+    window.addEventListener("blur", finishDrag, { signal: listeners.signal });
+    window.addEventListener("pagehide", pagehide, { signal: listeners.signal });
+    window.addEventListener("pageshow", pageshow, { signal: listeners.signal });
+    // Reduced motion needs no special animation path: all rotation is direct input.
     synchronize();
     function dispose() {
       disposed = true;
       synchronize();
+      listeners.abort();
       resizeObserver.disconnect();
       intersection.disconnect();
-      motionObserver.disconnect();
-      document.removeEventListener("pointermove", pointer);
-      document.removeEventListener("visibilitychange", synchronize);
-      window.removeEventListener("observatory:motion", motion);
-      window.removeEventListener("pagehide", pagehide);
-      window.removeEventListener("pageshow", pageshow);
-      reduced.removeEventListener("change", synchronize);
+      setReady(false);
       if (program) context.deleteProgram(program);
       if (geometry) context.deleteBuffer(geometry);
     }
-    document.addEventListener("astro:before-swap", dispose, { once: true });
+    document.addEventListener("astro:before-swap", dispose, { once: true, signal: listeners.signal });
   });
 </script>

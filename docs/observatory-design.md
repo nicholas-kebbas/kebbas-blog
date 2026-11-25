@@ -110,3 +110,9 @@ Owner requested no scrolling and a direct Granularity Games link instead of Play
 ## Color and detail revision — October 26, 2026
 
 Owner requested stronger color, sharper imagery, and no user toggles. Removed the shape, entropy, and motion controls. The sculpture now uses saturated lighting and a higher-density render target; the name and link transition use the same warm/cool spectrum. The scene runs a short opening, then renders a sharper still frame. OS reduced motion and Escape remain available without a control panel. Link-triggered transitions still run after the opening ends unless reduced motion or Escape has explicitly stopped motion. The single-screen layout and project destinations remain unchanged.
+
+## Manual sculpture and email contact — November 24, 2026
+
+The sculpture now starts in a fixed pose and rotates only when dragged with a mouse or touch. Release keeps that orientation without inertia; hovering does not move it. A grab cursor indicates interaction. Keyboard users can focus the sculpture, rotate with the arrow keys, and reset with Home. Rendering is requested by input, resize, or lifecycle recovery, with a sharper frame after release; it does not run continuously while idle. Reduced-motion preferences still bypass animated link transitions, and the sculpture always uses direct manual control.
+
+The work-together link now uses `mailto:nickkebbas@gmail.com`, opening the visitor’s configured email app. It uses ordinary link behavior without the page-navigation transition. The project links keep their existing destinations and transitions.

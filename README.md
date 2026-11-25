@@ -19,10 +19,11 @@ See [design notes](docs/observatory-design.md) for the interaction map and inspi
 ## Accessibility and performance
 
 - Static HTML content works without JavaScript; the artwork has an inline SVG fallback.
-- Artwork settles after a 4.5-second opening, stops in background tabs, and respects the operating system's reduced-motion setting. Escape stops the opening immediately. Rendering uses bounded high-density canvases, with a sharper still frame once motion ends.
+- Artwork stays still until dragged with a mouse or touch. Arrow keys rotate the focused sculpture; Home resets its pose. It stops exactly where released, with no automatic rotation or inertia. Rendering runs only when needed and uses a sharper still frame after dragging.
 - Keyboard navigation, visible focus, and a skip link. No visible animation controls or configuration panel.
 - The homepage fits the viewport without scrolling. Compact layouts retain the project links and the work-together invitation.
 - Native modified clicks and browser history remain intact. Transitions have a bounded recovery and support Escape.
+- “Let’s work together” opens the visitor’s email app addressed to nickkebbas@gmail.com.
 - No JavaScript means static artwork and native links. No WebGL means the inline SVG sculpture remains visible.
 - Fonts are self-hosted. Syne is licensed under the included SIL Open Font License.
 
