@@ -10,7 +10,7 @@ export const SCENES = [
   { id: "eclipse", name: "Eclipse" },
   { id: "flux", name: "Flux" },
   { id: "glacial", name: "Glacial" },
-  { id: "dunes", name: "Dunes" },
+  { id: "alexandria", name: "Alexandria" },
   { id: "orbit", name: "Orbit" },
   { id: "bloom", name: "Bloom" },
   { id: "vortex", name: "Vortex" },

@@ -9,6 +9,7 @@ const stops = [...document.querySelectorAll<HTMLAnchorElement>("[data-scene-stop
 const sceneNumber = document.querySelector<HTMLElement>("[data-scene-number]");
 const sceneName = document.querySelector<HTMLElement>(".scene-status [data-scene-name]");
 const cue = document.querySelector<HTMLElement>("[data-scroll-cue]");
+const alexandriaScene = SCENES.findIndex((scene) => scene.id === "alexandria");
 let frame = 0;
 let currentScene = -1;
 let active = true;
@@ -27,6 +28,10 @@ function updateScroll() {
   const scenePosition = progress * LAST_SCENE_INDEX;
   // Reduced motion uses distinct still scenes, with no shrinking or morphing.
   const visualProgress = reduced.matches ? Math.round(scenePosition) / LAST_SCENE_INDEX : progress;
+  const visualPosition = visualProgress * LAST_SCENE_INDEX;
+  // A still painting takes over for one scene; scrolling alone controls its dissolve.
+  const alexandriaOpacity = ease((visualPosition - (alexandriaScene - .9)) / .8)
+    * (1 - ease((visualPosition - (alexandriaScene + .1)) / .8));
   // Keep the opening transition within the first scene as the gallery grows.
   const sculptureOpacity = reduced.matches
     ? (visualProgress === 0 ? 1 : 0)
@@ -35,6 +40,7 @@ function updateScroll() {
   root.style.setProperty("--name-recede", String(reduced.matches ? 0 : ease(scenePosition / .72)));
   root.style.setProperty("--sculpture-opacity", String(sculptureOpacity));
   root.style.setProperty("--veil-opacity", String(.45 + .5 * (1 - sculptureOpacity)));
+  root.style.setProperty("--alexandria-opacity", String(alexandriaOpacity));
   if (stage) {
     stage.inert = sculptureOpacity === 0;
     stage.hidden = sculptureOpacity === 0;

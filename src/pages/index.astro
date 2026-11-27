@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import ObservatoryCanvas from "../components/ObservatoryCanvas.astro";
 import AuroraBackdrop from "../components/AuroraBackdrop.astro";
+import AlexandriaBackdrop from "../components/AlexandriaBackdrop.astro";
 import DimensionTransitions from "../components/DimensionTransitions.astro";
 import { SCENES, LAST_SCENE_INDEX } from "../lib/scenes";
 import {
@@ -58,10 +59,12 @@ const profile = {
     <main id="main" tabindex="-1">
       <div class="scroll-landmarks" aria-hidden="true">
         {SCENES.map((scene, index) => <span id={scene.id} style={`--stop: ${index}`} />)}
+        <span id="dunes" style={`--stop: ${SCENES.findIndex((scene) => scene.id === "alexandria")}`} />
       </div>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-art">
           <AuroraBackdrop />
+          <AlexandriaBackdrop />
           <div class="sculpture-stage" data-sculpture-stage>
             <ObservatoryCanvas />
           </div>
