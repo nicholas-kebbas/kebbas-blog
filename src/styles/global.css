@@ -125,7 +125,7 @@ main:focus {
   height: 100svh;
 }
 html[data-scroll-ready] .scroll-experience main {
-  height: 500svh;
+  height: calc(var(--scene-count) * 100svh);
 }
 .scroll-landmarks {
   display: none;
@@ -136,7 +136,7 @@ html[data-scroll-ready] .scroll-experience main {
 html[data-scroll-ready] .scroll-landmarks { display: block; }
 .scroll-landmarks > span {
   position: absolute;
-  top: calc(var(--stop) * (100% - 100dvh) / 4);
+  top: calc(var(--stop) * (100% - 100dvh) / var(--last-scene));
   width: 1px;
   height: 1px;
 }
@@ -282,14 +282,14 @@ html[data-scroll-ready] .scroll-landmarks { display: block; }
   letter-spacing: .16em;
 }
 .scene-divider { width: 32px; height: 1px; background: #ffffff55; }
-.scene-controls { gap: 28px; }
+.scene-controls { flex-direction: column; align-items: flex-end; gap: 0; }
 .scroll-cue { font-size: 9px; letter-spacing: .13em; }
 .scroll-cue > span { margin-left: 10px; color: var(--cyan); }
-.scene-nav { gap: 4px; pointer-events: auto; }
+.scene-nav { gap: 2px; pointer-events: auto; }
 .scene-nav a {
   display: grid;
   place-items: center;
-  width: 28px;
+  width: 24px;
   height: 44px;
 }
 .scene-nav a > span {
@@ -323,6 +323,7 @@ html[data-motion="still"] *::after {
   .hero-cta {
     font-size: 22px;
   }
+  .copyright { display: none; }
 }
 @media (max-width: 760px) {
   .site-header {
@@ -349,10 +350,28 @@ html[data-motion="still"] *::after {
   .hero-cta {
     font-size: 20px;
   }
-  .copyright { display: none; }
-  .scene-controls { flex-direction: column; align-items: flex-end; gap: 0; }
+  .screen-footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+  }
+  .scene-controls { display: contents; }
+  .scene-nav {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(var(--scene-count), minmax(24px, 1fr));
+  }
+  .scene-nav a { width: 100%; }
   .scroll-cue { font-size: 8px; }
   .scene-status { min-width: 0; }
+}
+@media (max-width: 500px) {
+  .scene-nav { grid-template-columns: repeat(8, minmax(24px, 1fr)); gap: 0 2px; }
+  .scene-nav a { height: 28px; }
+  .scene-nav a > span { width: 20px; }
+  .scene-status { font-size: 9px; gap: 8px; }
+  .scene-divider { width: 20px; }
+  .scroll-cue { font-size: 7px; letter-spacing: .08em; }
 }
 @media (max-width: 650px) {
   :root {
@@ -426,6 +445,12 @@ html[data-motion="still"] *::after {
     bottom: 16px;
     font-size: 6px;
   }
+}
+@media (min-width: 501px) and (max-width: 760px) and (max-height: 360px) {
+  .hero-type { top: 112px; transform: none; }
+  .hero h1 { font-size: calc(14dvh * var(--name-scale)); }
+  .hero-cta { margin-top: 10px; }
+  .scene-nav a { height: 28px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
