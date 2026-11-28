@@ -67,7 +67,7 @@
 </style>
 
 <script>
-  import { LAST_SCENE_INDEX } from "../lib/scenes";
+  import { LAST_PROCEDURAL_SCENE_INDEX, LAST_SCENE_INDEX } from "../lib/scenes";
 
   const vertexSource = `
     attribute vec2 position;
@@ -430,13 +430,13 @@
       float aspect = resolution.x / resolution.y;
       vec2 p = (st - .5) * vec2(mix(1.1, aspect, smoothstep(.65, 1.25, aspect)), 1.0);
       float flow = progress * ${LAST_SCENE_INDEX.toFixed(1)};
-      float chapter = clamp(flow, 1.0, ${LAST_SCENE_INDEX.toFixed(1)});
+      float chapter = clamp(flow, 1.0, ${LAST_PROCEDURAL_SCENE_INDEX.toFixed(1)});
       float blend = smoothstep(.1, .9, fract(chapter));
       vec2 starSpace = (st - .5) * vec2(aspect, 1.0);
       vec3 starLight = stars(starSpace);
       // Only the current study and its neighbor render, regardless of zone count.
       vec3 color = study(floor(chapter), p, flow, starLight);
-      if (blend > .0) color = mix(color, study(min(floor(chapter) + 1.0, ${LAST_SCENE_INDEX.toFixed(1)}), p, flow, starLight), blend);
+      if (blend > .0) color = mix(color, study(min(floor(chapter) + 1.0, ${LAST_PROCEDURAL_SCENE_INDEX.toFixed(1)}), p, flow, starLight), blend);
       float vignette = 1.0 - smoothstep(.28, .86, length((st - .5) * vec2(1.0, .85)));
       color *= .65 + .35 * vignette;
       color = pow(1.0 - exp(-color * 1.35), vec3(.94));
@@ -467,7 +467,8 @@
     let lost = false;
     let disposed = false;
     let pageActive = true;
-    const clamp = (value: number) => Math.max(0, Math.min(1, value));
+    // The last procedural pose stays still beneath the city paintings.
+    const clamp = (value: number) => Math.max(0, Math.min(LAST_PROCEDURAL_SCENE_INDEX / LAST_SCENE_INDEX, value));
     const initial = Number(document.documentElement.dataset.scrollProgress || 0);
     let progress = Number.isFinite(initial) ? clamp(initial) : 0;
 
@@ -543,7 +544,7 @@
       context.uniform1f(progressUniform, progress);
       context.drawArrays(context.TRIANGLES, 0, 6);
       element.dataset.ready = "";
-      element.dataset.scene = String(Math.min(LAST_SCENE_INDEX, Math.max(1, Math.round(progress * LAST_SCENE_INDEX))));
+      element.dataset.scene = String(Math.min(LAST_PROCEDURAL_SCENE_INDEX, Math.max(1, Math.round(progress * LAST_SCENE_INDEX))));
     }
     function requestRender() {
       if (canRender() && !raf) raf = requestAnimationFrame(draw);

@@ -1,0 +1,164 @@
+{
+  "createdAt": "2026-11-27",
+  "mode": "built-in image_gen",
+  "style": "Original FFIX-inspired fan environment paintings; not official game screenshots.",
+  "dimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "delivery": {
+    "format": "webp",
+    "quality": 86,
+    "effort": 6,
+    "desktopWidth": 1672,
+    "mobileWidth": 960,
+    "transform": "format conversion and proportional downscaling only"
+  },
+  "scope": [
+    "Alexandria (retained)",
+    "DALI VILLAGE",
+    "LINDBLUM",
+    "BURMECIA, REALM OF ETERNAL RAIN",
+    "TRENO, THE DARK CITY",
+    "CLEYRA",
+    "CONDE PETIE",
+    "BLACK MAGE VILLAGE",
+    "MADAIN SARI",
+    "ESTO GAZA",
+    "DAGUERREO",
+    "BRAN BAL ON TERRA"
+  ],
+  "sources": [
+    "https://finalfantasy.fandom.com/wiki/Final_Fantasy_IX_locations",
+    "https://elmhurst.ecampus.com/final-fantasy-ix-official-strategy-guide/bk/9780744000412",
+    "https://finalfantasy.fandom.com/wiki/Conde_Petie",
+    "https://finalfantasy.fandom.com/wiki/Cleyra",
+    "https://ffonline.com/ff9/world/Daguerreo",
+    "https://ffonline.com/ff9/world/Bran-Bal",
+    "https://ffonline.com/ff9/world/Esto-Gaza",
+    "https://ffonline.com/ff9/world/Madain-Sari"
+  ],
+  "assets": [
+    {
+      "id": "dali",
+      "desktop": "public/images/dali-ffix.webp",
+      "mobile": "public/images/dali-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-41588906-fc80-4996-99eb-9078516ac468.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of DALI VILLAGE from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. A peaceful rustic farming hamlet: iconic huge old wooden windmill, cozy squat stone cottages with curved thatched and shingled roofs clustered along an earthen path, vegetable plots and golden fields on green rolling hills above a distant sea of Mist. The windmill is the focal point on the right, warm amber lamplight at dusk, soft peach sunset meeting teal twilight, homey pastoral and gently mysterious. Foreground left is shaded wild grass and soft rolling hills, no industrial city or castle. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 228052,
+      "mobileBytes": 101124
+    },
+    {
+      "id": "lindblum",
+      "desktop": "public/images/lindblum-ffix.webp",
+      "mobile": "public/images/lindblum-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-6b86db1d-5a90-4fb9-940e-21c9e0a3f935.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of LINDBLUM from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. The immense steampunk Regency of Lindblum built vertically on towering rock cliffs above a blue-gray sea of Mist: colossal rounded stone defensive walls, grand domed castle and bulbous fortress turrets, layered copper-roofed medieval districts, airship docks projecting from walls, a small ornate propeller-driven fantasy airship entering a hangar. Sweeping dramatic distance, majestic industrial-fantasy scale, dusky copper and petrol teal, amber windows and cool cloud shafts. Focus on the giant domed airship citadel on the right. Left is shadowed cliff and quiet misty sky. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 239998,
+      "mobileBytes": 106110
+    },
+    {
+      "id": "burmecia",
+      "desktop": "public/images/burmecia-ffix.webp",
+      "mobile": "public/images/burmecia-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-e637b306-0fba-4547-a5e1-26624ea706b0.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of BURMECIA, REALM OF ETERNAL RAIN from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. A moody ruined city under constant rain. Elegant tall slender gray Gothic stone towers with curved spires, rain-darkened arched bridges and terraces, broken street paving, ornamental palace architecture receding through blue rainfall. Empty glistening stone stairway and puddles lead toward a magnificent Burmecian palace on the right; violet-blue rainclouds, silver rain streaks, faint warm light in a few distant windows. Melancholy and beautiful, vegetation overtaking cracked stone, not a generic European city. Quiet shadowed arches in left foreground. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 244546,
+      "mobileBytes": 105166
+    },
+    {
+      "id": "treno",
+      "desktop": "public/images/treno-ffix.webp",
+      "mobile": "public/images/treno-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-5f3ec28f-076e-4580-bb24-0b9f95240815.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of TRENO, THE DARK CITY from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. An elegant medieval aristocratic city under an eternal starry night sky. Curving terraces of ornate cream-stone buildings, decorative wrought iron balconies, small arched canal bridges and stone steps, auction-house facade with glowing tall windows, mysterious domed rooftops and elaborate amber streetlamps. Indigo-black canals mirror gold light, violet ivy, deep blue sky, a hint of subtle aurora high above. Romantic layered winding city on the right; shadowed balcony and still water on left. Rich theatrical golden highlights against midnight blue, no obvious castle or sword. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 294356,
+      "mobileBytes": 130830
+    },
+    {
+      "id": "cleyra",
+      "desktop": "public/images/cleyra-ffix.webp",
+      "mobile": "public/images/cleyra-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-b01feffc-b1cc-4d61-8a9a-7bd193d0a65b.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of CLEYRA from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. The peaceful pre-destruction settlement at the crown of a gigantic ancient tree above the desert: intricate timber and warm sandstone buildings nestle amid vast green leafy boughs, winding branch walkways and rope bridges lead to a delicate tall cathedral and small windmill. View across upper canopy toward the cathedral on right, gigantic tree trunk dropping into a broad spiraling golden protective sandstorm far below. Sunset glows through foliage, jade green leaves, ochre dust and purple shadows. Convey enormous tree scale and elevated sanctuary, no ground-level stone city; left shady bough and atmospheric sand. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 299958,
+      "mobileBytes": 127194
+    },
+    {
+      "id": "conde-petie",
+      "desktop": "public/images/conde-petie-ffix.webp",
+      "mobile": "public/images/conde-petie-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-38306c5a-6e53-44fd-a454-acd539d73fb5.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of CONDE PETIE from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. The distinctive dwarven settlement is a single long, squat, flat-roofed bridge-like sandstone building spanning TWO enormous exposed roots of the distant Iifa Tree above a rugged valley. Weathered pale yellow stone, chunky carved archways, warm ochre awnings, simple terraces and a broad connecting structure, modest rustic scale within a colossal root landscape. Not a tall city, not underground. Camera views its bridge profile from a neighboring gigantic root; the building spans right half, dusty sunlit hills and bluish ravines, late-afternoon honey light and soft teal shadows, left shadowed root and valley. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 209932,
+      "mobileBytes": 90780
+    },
+    {
+      "id": "black-mage-village",
+      "desktop": "public/images/black-mage-village-ffix.webp",
+      "mobile": "public/images/black-mage-village-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-0da2d3f7-2090-4e1e-882d-61b67ddfe5c5.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of BLACK MAGE VILLAGE from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. A secluded enchanted village deep inside a towering forest. Charming wooden cottages shaped like huge black-mage hats, with exaggerated conical pointed straw roofs and round doors, small lanterns glowing warmly along a winding boardwalk, an old wooden waterwheel beside a brook, oversized tree roots and moss. No people or mages visible, just their wonderfully distinctive homes. Cozy, quiet, emerald and aquamarine woodland light, firefly-like small lights, amber windows against deep green and indigo, pointed-roof houses concentrated on right; left shaded ferns and tree trunk. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 275454,
+      "mobileBytes": 118180
+    },
+    {
+      "id": "madain-sari",
+      "desktop": "public/images/madain-sari-ffix.webp",
+      "mobile": "public/images/madain-sari-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-6932edf9-8150-4fe7-b24c-2c5d5ea395b3.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of MADAIN SARI from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. The ancient ruined summoner village in a remote rocky landscape: weathered sun-bleached stone houses with partly collapsed rounded roofs, broken arches and broad steps, hardy green plants and vines reclaiming terraces, one surviving cozy small home with warm window light. The distinctive circular Eidolon Wall, ancient sacred mural-covered stone enclosure with faded mythic creature silhouettes but NO readable text, is prominent toward the right in middle distance. Quiet archaeological melancholy and hope, pink-orange dusk and lavender mountains, no grand thriving city or castle. Left dark crumbling masonry and soft dry grasses. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 286708,
+      "mobileBytes": 117542
+    },
+    {
+      "id": "esto-gaza",
+      "desktop": "public/images/esto-gaza-ffix.webp",
+      "mobile": "public/images/esto-gaza-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-8767b452-43c5-4802-9c3c-5b95ee998732.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of ESTO GAZA from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. A remote religious sanctuary on the snowy Lost Continent near Mount Gulug: a compact cluster of weathered stone shrine buildings and steep snow-covered roofs, carved sanctuary entrance and wide viewing terrace high on a frozen mountain. A shrine with a tall triangular steeple and warmly glowing arched window occupies the right. Endless blue-white snowy ridges, swirling fog over a distant cold sea, restrained green aurora in polar indigo night sky, warm candlelit windows amid frost. Reverent isolated mountain pilgrimage stop, not a huge city, no volcano lava. Left dark rocky snowbank and night sky. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 214650,
+      "mobileBytes": 95180
+    },
+    {
+      "id": "daguerreo",
+      "desktop": "public/images/daguerreo-ffix.webp",
+      "mobile": "public/images/daguerreo-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-5a0cf668-dd52-45c8-a6c4-f12edc741609.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of DAGUERREO from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. The scholarly settlement INSIDE an immense WATER-FILLED CAVERN: soaring stacked wooden bookshelves and galleries carved into ancient stone walls, ornate arches, broad bridges over luminous turquoise underground waterways, water-powered wooden mechanical lifts and suspended platforms linking book-lined terraces. Focus on the cavern library's tiered architecture on right, amber reading lanterns and small lamps reflected in blue-green flowing water; overhead huge stalactites and shafts of silver cave light. Grand but tranquil, secret sanctuary of books and water. Not an exterior castle, no open sky, no people, no legible writing. Left shadowed cave wall and quiet dark pool. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 240426,
+      "mobileBytes": 106598
+    },
+    {
+      "id": "bran-bal",
+      "desktop": "public/images/bran-bal-ffix.webp",
+      "mobile": "public/images/bran-bal-ffix-mobile.webp",
+      "generatedOriginal": "01a0a238-d0f0-7781-ab88-6fd9056c798b/exec-a9d1c091-b30d-4085-bb64-5b5ef5f0bf26.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-bleed personal website background, landscape 16:9, high resolution. Create an original fan-inspired environment illustration of BRAN BAL ON TERRA from FINAL FANTASY IX. Evoke the intricate pre-rendered painted environments of the original game: rich hand-painted textures, storybook proportions, carefully composed cinematic depth, no modern photorealism. An eerie tranquil alien Genome village in the world of Terra: small pale ivory organic shell-like buildings and gently curving sculpted bridges, delicate luminous blue crystal growths, translucent root-like formations and strange spiral plant structures. Quiet winding paths beside glowing sapphire-blue water. A cluster of pale houses with oval doorways and pointed softly curved roofs on the right, enormous otherworldly tree-root structures fading into cobalt and violet haze behind. Ethereal cyan bioluminescence rather than warm lamps, strange blue night atmosphere with a subtle magenta horizon. No medieval castle, no ordinary European city, no modern skyscrapers, no people. Left deep blue organic foreground shapes and haze. Composition: leftmost 38 percent is dark, quiet atmospheric negative space for white website typography overlaid separately. Concentrate landmark architecture at 68–76 percent across with a strong silhouette that survives a portrait crop centered at 72 percent. Detailed scene fills right two-thirds and distance, generous atmosphere and depth. Luminous but restrained dark indigo/violet shadows harmonize with a northern-lights-themed website. No text, lettering, logos, watermarks, UI, characters, title cards or borders. Original art inspired by the game setting, not an official game screenshot. Do not include Alexandria's giant sword or unrelated landmark buildings.",
+      "width": 1672,
+      "height": 941,
+      "desktopBytes": 206006,
+      "mobileBytes": 93986
+    }
+  ]
+}
